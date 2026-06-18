@@ -239,9 +239,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">Entrar</button>
-    <div style="margin-top:14px;font-size:11px;color:var(--text-muted);text-align:center">
-      Admin: <strong>admin</strong> / <strong>admin123</strong> &nbsp;|&nbsp; Cobrador: <strong>cobrador</strong> / <strong>cobrador123</strong>
-    </div>
+
   </div>
 </div>
 
@@ -615,16 +613,20 @@ function cerrarModal(id){document.getElementById(id).classList.remove('open')}
 // ═══════════════════ DATA ═══════════════════
 const DB = JSON.parse(localStorage.getItem('pao_data')||'null')||{clientes:[],prestamos:[],pagos:[],bitacora:[]};
 if(!DB.bitacora)DB.bitacora=[];
+const _DEFAULT_USERS=[
+  {username:'admin',password:'admin123',role:'admin'},
+  {username:'cobrador',password:'cobrador123',role:'cobrador'}
+];
 const CONFIG = JSON.parse(localStorage.getItem('pao_cfg')||'null')||{
   empresa:'Préstamos a la Orden',telefono:'',direccion:'',moneda:'RD$',
   mensajeRecibo:'Gracias por su pago puntual.',logo:'',
-  theme:'light',
-  pctMora:0,
-  users:[
-    {username:'admin',password:'admin123',role:'admin'},
-    {username:'cobrador',password:'cobrador123',role:'cobrador'}
-  ]
+  theme:'light',pctMora:0,
+  users:_DEFAULT_USERS
 };
+// Garantizar que siempre existan usuarios aunque el localStorage esté corrupto
+if(!CONFIG.users||CONFIG.users.length===0) CONFIG.users=_DEFAULT_USERS;
+if(CONFIG.pctMora===undefined) CONFIG.pctMora=0;
+if(!CONFIG.moneda) CONFIG.moneda='RD$';
 
 // ═══════════════════ AUTH ═══════════════════
 let CURRENT_USER = null;
@@ -1226,43 +1228,110 @@ function renderHistorialPrestamo(pid){
 }
 
 // ═══════════════════ RECIBOS PDF ═══════════════════
-function reciboHTML(titulo, filas, nota=''){
+// ═══ RECIBOS PDF + COMPARTIR ══════════════════════════════════
+function reciboHTMLContent(titulo, filas, nota=''){
   const cfg=CFG();
   const logoTag=cfg.logo?`<img src="${cfg.logo}" style="height:50px;max-width:140px;object-fit:contain">`:
     `<div style="font-size:20px;font-weight:800;color:#1a3a5c">${cfg.empresa||'Préstamos a la Orden'}</div>`;
-  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+  return`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,sans-serif;font-size:13px;color:#1e293b;background:#fff;padding:30px}
-    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #1a3a5c}
-    .empresa{max-width:200px}
-    .empresa-info{font-size:11px;color:#64748b;margin-top:4px;line-height:1.5}
+    body{font-family:Arial,sans-serif;font-size:13px;color:#1e293b;background:#fff;padding:24px}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #1a3a5c}
+    .empresa-info{font-size:11px;color:#64748b;margin-top:4px;line-height:1.6}
     .recibo-titulo{text-align:right}
-    .recibo-titulo h2{font-size:18px;color:#1a3a5c;font-weight:800;text-transform:uppercase}
+    .recibo-titulo h2{font-size:16px;color:#1a3a5c;font-weight:800;text-transform:uppercase}
     .recibo-titulo .fecha{font-size:11px;color:#64748b;margin-top:4px}
-    table{width:100%;border-collapse:collapse;margin:16px 0}
-    th{background:#1a3a5c;color:#fff;padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
-    td{padding:9px 12px;border-bottom:1px solid #e2e8f0;font-size:13px}
+    table{width:100%;border-collapse:collapse;margin:12px 0}
+    th{background:#1a3a5c;color:#fff;padding:7px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+    td{padding:8px 10px;border-bottom:1px solid #e2e8f0;font-size:12px}
     tr:last-child td{border-bottom:none}
-    .total-row td{font-weight:700;font-size:14px;background:#f0f7ff;color:#1a3a5c}
-    .footer{margin-top:24px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:center;font-size:11px;color:#64748b}
-    .firma{display:flex;justify-content:space-between;margin-top:32px}
-    .firma-line{width:180px;border-top:1px solid #1e293b;text-align:center;padding-top:6px;font-size:11px;color:#64748b}
-    @media print{body{padding:10px}}
+    .total-row td{font-weight:700;font-size:13px;background:#f0f7ff;color:#1a3a5c}
+    .nota{background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:8px 12px;font-size:11px;margin-bottom:12px}
+    .firma{display:flex;justify-content:space-between;margin-top:28px}
+    .firma-line{width:160px;border-top:1px solid #1e293b;text-align:center;padding-top:5px;font-size:10px;color:#64748b}
+    .footer{margin-top:16px;padding-top:12px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#64748b}
+    .share-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .share-btn{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;gap:6px}
+    .btn-share{background:#25D366;color:#fff}
+    .btn-download{background:#1a3a5c;color:#fff}
+    .btn-print{background:#64748b;color:#fff}
+    @media print{.share-bar{display:none!important}body{padding:8px}}
   </style></head><body>
+  <div class="share-bar">
+    <button class="share-btn btn-share" onclick="compartirPDF()">📤 Compartir</button>
+    <button class="share-btn btn-download" onclick="descargarPDF()">⬇️ Descargar PDF</button>
+    <button class="share-btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+  </div>
   <div class="header">
-    <div class="empresa">${logoTag}<div class="empresa-info">${cfg.telefono?cfg.telefono+'<br>':''} ${cfg.direccion||''}</div></div>
-    <div class="recibo-titulo"><h2>${titulo}</h2><div class="fecha">Fecha: ${formatDate(today())}</div></div>
+    <div>${logoTag}<div class="empresa-info">${cfg.telefono||''}<br>${cfg.direccion||''}</div></div>
+    <div class="recibo-titulo"><h2>${titulo}</h2><div class="fecha">Fecha: ${formatDate(new Date().toISOString().split('T')[0])}</div></div>
   </div>
   <table><thead><tr><th>Concepto</th><th style="text-align:right">Monto</th></tr></thead><tbody>
-    ${filas.map((f,i)=>f.total?`<tr class="total-row"><td>${f.label}</td><td style="text-align:right">${f.value}</td></tr>`:`<tr><td>${f.label}</td><td style="text-align:right">${f.value}</td></tr>`).join('')}
+    ${filas.map(f=>f.total
+      ?`<tr class="total-row"><td>${f.label}</td><td style="text-align:right">${f.value}</td></tr>`
+      :`<tr><td>${f.label}</td><td style="text-align:right">${f.value}</td></tr>`
+    ).join('')}
   </tbody></table>
-  ${nota?`<div style="background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:10px 14px;font-size:12px;margin-bottom:16px">${nota}</div>`:''}
+  ${nota?`<div class="nota">${nota}</div>`:''}
   <div class="firma">
     <div class="firma-line">Firma del prestamista</div>
     <div class="firma-line">Firma del cliente</div>
   </div>
   <div class="footer">${cfg.mensajeRecibo||''}</div>
-  <script>window.onload=()=>{window.print()}<\/script></body></html>`;
+  <script>
+    const _titulo=${JSON.stringify(titulo)};
+    function formatFn(n){return'RD$'+Number(n||0).toLocaleString('es-DO',{minimumFractionDigits:2});}
+    async function compartirPDF(){
+      if(navigator.share&&navigator.canShare){
+        try{
+          // Convert page to blob via fetch of current HTML
+          const html=document.documentElement.outerHTML;
+          const blob=new Blob([html],{type:'text/html'});
+          const file=new File([blob],_titulo.replace(/\s+/g,'_')+'.html',{type:'text/html'});
+          if(navigator.canShare({files:[file]})){
+            await navigator.share({files:[file],title:_titulo});
+            return;
+          }
+        }catch(e){}
+        // Fallback: share as text
+        try{
+          const rows=[...document.querySelectorAll('td')];
+          let txt=_titulo+'\n';
+          for(let i=0;i<rows.length;i+=2){
+            if(rows[i]&&rows[i+1]) txt+=rows[i].textContent+': '+rows[i+1].textContent+'\n';
+          }
+          await navigator.share({title:_titulo,text:txt});
+          return;
+        }catch(e){}
+      }
+      descargarPDF();
+    }
+    function descargarPDF(){
+      const html=document.documentElement.outerHTML;
+      const blob=new Blob([html],{type:'text/html'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=_titulo.replace(/\s+/g,'_')+'_${new Date().toISOString().split('T')[0]}.html';
+      a.click();
+    }
+  <\/script>
+  </body></html>`;
+}
+
+function abrirRecibo(titulo, filas, nota=''){
+  const html=reciboHTMLContent(titulo,filas,nota);
+  const w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();}
+  else{
+    // Popup bloqueado - fallback: descargar
+    const blob=new Blob([html],{type:'text/html'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=titulo.replace(/\s+/g,'_')+'.html';
+    a.click();
+    toast('Recibo descargado (popup bloqueado)','warn');
+  }
 }
 
 function generarReciboDesembolso(pid){
@@ -1276,14 +1345,12 @@ function generarReciboDesembolso(pid){
     {label:'Monto prestado',value:fmt(p.monto)},
     {label:`Interés (${p.interesPct}%)`,value:fmt(p.interesCalc)},
     {label:'Frecuencia de pago',value:p.frecuencia},
-    {label:'Cantidad de cuotas',value:p.cuotas},
+    {label:'Cantidad de cuotas',value:String(p.cuotas)},
     {label:'Valor de cada cuota',value:fmt(p.capitalCuota+p.interesCuota)},
     {label:'Primera cuota vence',value:formatDate(addDays(p.fechaDesembolso,p.frecuencia==='Semanal'?7:15))},
     {label:'TOTAL A PAGAR',value:fmt(p.totalCobrar),total:true},
   ];
-  const w=window.open('','_blank');
-  w.document.write(reciboHTML('Contrato de Préstamo',filas));
-  w.document.close();
+  abrirRecibo('Contrato de Préstamo',filas);
 }
 
 function generarReciboPagoById(pagId){
@@ -1293,28 +1360,29 @@ function generarReciboPagoById(pagId){
 function generarReciboPago(){
   if(!prestamoSeleccionado)return;
   const p=prestamoSeleccionado;
-  const pagos=getPagosPresta(p.id);
-  if(pagos.length===0){toast('Registra un pago primero','err');return}
-  generarReciboPagoObj(pagos[pagos.length-1]);
+  const pagosP=getPagosPresta(p.id).filter(pg=>pg.estado!=='Anulado');
+  if(pagosP.length===0){toast('Registra un pago primero','err');return}
+  generarReciboPagoObj(pagosP[pagosP.length-1]);
 }
 function generarReciboPagoObj(pg){
   const p=DB.prestamos.find(x=>x.id===pg.prestamoId);if(!p)return;
   const cli=DB.clientes.find(c=>c.id===p.clienteId);
   const stats=calcPrestamoStats(p);
+  const saldo=Math.max(0,p.totalCobrar-stats.totalPagado);
   const filas=[
     {label:'Cliente',value:cli?cli.nombre:'—'},
     {label:'Cédula',value:cli&&cli.cedula?cli.cedula:'—'},
+    {label:'Teléfono',value:cli&&cli.telefono?cli.telefono:'—'},
     {label:'Fecha de pago',value:formatDate(pg.fecha)},
-    {label:'Cuota #',value:pg.cuotaNumero||'—'},
+    {label:'Cuota #',value:String(pg.cuotaNumero||'—')},
     {label:'Interés aplicado',value:fmt(pg.interesAplicado)},
     {label:'Capital aplicado',value:fmt(pg.capitalAplicado)},
     pg.excedente>0?{label:'Excedente aplicado a capital',value:fmt(pg.excedente)}:null,
-    {label:'Saldo pendiente del préstamo',value:fmt(Math.max(0,p.totalCobrar-stats.totalPagado))},
+    pg.recargo>0?{label:'Recargo por mora incluido',value:fmt(pg.recargo)}:null,
+    {label:'Saldo pendiente',value:fmt(saldo)},
     {label:'MONTO RECIBIDO',value:fmt(pg.monto),total:true},
   ].filter(Boolean);
-  const w=window.open('','_blank');
-  w.document.write(reciboHTML('Recibo de Pago',filas,pg.observaciones?`Nota: ${pg.observaciones}`:''));
-  w.document.close();
+  abrirRecibo('Recibo de Pago',filas,pg.observaciones?`Nota: ${pg.observaciones}`:'');
 }
 
 // ═══════════════════ EXPORTAR ═══════════════════
