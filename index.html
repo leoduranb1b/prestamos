@@ -902,7 +902,14 @@ function renderDashboard(){
 function guardarCliente(){
   const nombre=document.getElementById('cli-nombre').value.trim();
   const cedula=document.getElementById('cli-cedula').value.trim();
+  const telefono=document.getElementById('cli-tel').value.trim();
   if(!nombre){toast('El nombre es requerido','err');return}
+  if(cedula && cedula.replace(/\D/g,'').length!==11){
+    toast('La cédula debe tener 11 dígitos','err');return;
+  }
+  if(telefono && telefono.replace(/\D/g,'').length!==10){
+    toast('El teléfono debe tener 10 dígitos','err');return;
+  }
   if(cedula){
     const dup=DB.clientes.find(c=>c.cedula&&c.cedula.replace(/-/g,'')=== cedula.replace(/-/g,''));
     if(dup){toast('Esa cédula ya está registrada: '+dup.nombre,'err');return}
@@ -959,7 +966,14 @@ function guardarEditCliente(){
   const c=DB.clientes.find(x=>x.id===id);if(!c)return;
   const nombre=document.getElementById('edit-cli-nombre').value.trim();
   const cedula=document.getElementById('edit-cli-cedula').value.trim();
+  const telefono=document.getElementById('edit-cli-tel').value.trim();
   if(!nombre){toast('El nombre es requerido','err');return}
+  if(cedula && cedula.replace(/\D/g,'').length!==11){
+    toast('La cédula debe tener 11 dígitos','err');return;
+  }
+  if(telefono && telefono.replace(/\D/g,'').length!==10){
+    toast('El teléfono debe tener 10 dígitos','err');return;
+  }
   if(cedula){
     const dup=DB.clientes.find(x=>x.cedula&&x.cedula.replace(/-/g,'')=== cedula.replace(/-/g,'')&&x.id!==id);
     if(dup){toast('Esa cédula ya está registrada: '+dup.nombre,'err');return}
