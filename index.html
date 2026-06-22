@@ -168,7 +168,7 @@ tr:hover td{background:var(--surface2)}
 /* MODAL */
 .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
 .modal-backdrop.open{display:flex}
-.modal{background:var(--surface);border-radius:var(--radius-lg);padding:20px;width:100%;max-width:480px;border:1px solid var(--border)}
+.modal{background:var(--surface);border-radius:var(--radius-lg);padding:20px;width:100%;max-width:480px;border:1px solid var(--border);max-height:85vh;overflow-y:auto}
 .modal-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;color:var(--text)}
 .modal-close{cursor:pointer;color:var(--text-muted);background:none;border:none;font-size:22px;line-height:1;padding:0 4px}
 
@@ -234,11 +234,68 @@ var o=Math.min(a.sheetRows||1e7,f.length);var l={s:{r:0,c:0},e:{r:n,c:i}};if(e["
 var o=((a=s[17])==null?void 0:a[0])?Ob(e,e[_b(s[17][0].data)][0]):[];var l=vb(s[3][0].data);var c=0;l[1].forEach(function(r){var a=vb(r.data);var n=e[_b(a[2][0].data)][0];var i=db(n.meta[1][0].data);if(i!=6002)throw new Error("6001 unexpected reference to ".concat(i));var s=Ib(e,n);s.data.forEach(function(e,r){e.forEach(function(e,a){var n=Ra({r:c+r,c:a});var i=Sb(e,f,o);if(i)t[n]=i})});c+=s.nrows})}function Db(e,r){var t=vb(r.data);var a={"!ref":"A1"};var n=e[_b(t[2][0].data)];var i=db(n[0].meta[1][0].data);if(i!=6001)throw new Error("6000 unexpected reference to ".concat(i));Nb(e,n[0],a);return a}function Fb(e,r){var t;var a=vb(r.data);var n={name:((t=a[1])==null?void 0:t[0])?nb(a[1][0].data):"",sheets:[]};var i=gb(a[2],_b);i.forEach(function(r){e[r].forEach(function(r){var t=db(r.meta[1][0].data);if(t==6e3)n.sheets.push(Db(e,r))})});return n}function Pb(e,r){var t=Nw();var a=vb(r.data);var n=gb(a[1],_b);n.forEach(function(r){e[r].forEach(function(r){var a=db(r.meta[1][0].data);if(a==2){var n=Fb(e,r);n.sheets.forEach(function(e,r){Dw(t,e,r==0?n.name:n.name+"_"+r,true)})}})});if(t.SheetNames.length==0)throw new Error("Empty NUMBERS file");return t}function Lb(e){var r,t,a,n;var i={},s=[];e.FullPaths.forEach(function(e){if(e.match(/\.iwpv2/))throw new Error("Unsupported password protection")});e.FileIndex.forEach(function(e){if(!e.name.match(/\.iwa$/))return;var r;try{r=kb(e.content)}catch(t){return console.log("?? "+e.content.length+" "+(t.message||t))}var a;try{a=mb(r)}catch(t){return console.log("## "+(t.message||t))}a.forEach(function(e){i[e.id]=e.messages;s.push(e.id)})});if(!s.length)throw new Error("File has no messages");var f=((n=(a=(t=(r=i==null?void 0:i[1])==null?void 0:r[0])==null?void 0:t.meta)==null?void 0:a[1])==null?void 0:n[0].data)&&db(i[1][0].meta[1][0].data)==1&&i[1][0];if(!f)s.forEach(function(e){i[e].forEach(function(e){var r=db(e.meta[1][0].data)>>>0;if(r==1){if(!f)f=e;else throw new Error("Document has multiple roots")}})});if(!f)throw new Error("Cannot find Document root");return Pb(i,f)}function Mb(e,r,t){var a,n,i,s;if(!((a=e[6])==null?void 0:a[0])||!((n=e[7])==null?void 0:n[0]))throw"Mutation only works on post-BNC storages!";var f=((s=(i=e[8])==null?void 0:i[0])==null?void 0:s.data)&&db(e[8][0].data)>0||false;if(f)throw"Math only works with normal offsets";var o=0;var l=ab(e[7][0].data),c=0,h=[];var u=ab(e[4][0].data),d=0,v=[];for(var p=0;p<r.length;++p){if(r[p]==null){l.setUint16(p*2,65535,true);u.setUint16(p*2,65535);continue}l.setUint16(p*2,c,true);u.setUint16(p*2,d,true);var g,m;switch(typeof r[p]){case"string":g=Cb({t:"s",v:r[p]},t);m=yb({t:"s",v:r[p]},t);break;case"number":g=Cb({t:"n",v:r[p]},t);m=yb({t:"n",v:r[p]},t);break;case"boolean":g=Cb({t:"b",v:r[p]},t);m=yb({t:"b",v:r[p]},t);break;default:throw new Error("Unsupported value "+r[p]);}h.push(g);c+=g.length;v.push(m);d+=m.length;++o}e[2][0].data=ub(o);for(;p<e[7][0].data.length/2;++p){l.setUint16(p*2,65535,true);u.setUint16(p*2,65535,true)}e[6][0].data=fb(h);e[3][0].data=fb(v);return o}function Ub(e,r){if(!r||!r.numbers)throw new Error("Must pass a `numbers` option -- check the README");var t=e.Sheets[e.SheetNames[0]];if(e.SheetNames.length>1)console.error("The Numbers writer currently writes only the first table");var a=Ia(t["!ref"]);a.s.r=a.s.c=0;var n=false;if(a.e.c>9){n=true;a.e.c=9}if(a.e.r>49){n=true;a.e.r=49}if(n)console.error("The Numbers writer is currently limited to ".concat(Na(a)));var i=Aw(t,{range:a,header:1});var s=["~Sh33tJ5~"];i.forEach(function(e){return e.forEach(function(e){if(typeof e=="string")s.push(e)})});var f={};var o=[];var l=Ke.read(r.numbers,{type:"base64"});l.FileIndex.map(function(e,r){return[e,l.FullPaths[r]]}).forEach(function(e){var r=e[0],t=e[1];if(r.type!=2)return;if(!r.name.match(/\.iwa/))return;var a=r.content;var n=kb(a);var i=mb(n);i.forEach(function(e){o.push(e.id);f[e.id]={deps:[],location:t,type:db(e.messages[0].meta[1][0].data)}})});o.sort(function(e,r){return e-r});var c=o.filter(function(e){return e>1}).map(function(e){return[e,ub(e)]});l.FileIndex.map(function(e,r){return[e,l.FullPaths[r]]}).forEach(function(e){var r=e[0],t=e[1];if(!r.name.match(/\.iwa/))return;var a=mb(kb(r.content));a.forEach(function(e){e.messages.forEach(function(r){c.forEach(function(r){if(e.messages.some(function(e){return db(e.meta[1][0].data)!=11006&&sb(e.data,r[1])})){f[r[0]].deps.push(e.id)}})})})});function h(){for(var e=927262;e<2e6;++e)if(!f[e])return e;throw new Error("Too many messages")}var u=Ke.find(l,f[1].location);var d=mb(kb(u.content));var v;for(var p=0;p<d.length;++p){var g=d[p];if(g.id==1)v=g}var m=_b(vb(v.messages[0].data)[1][0].data);u=Ke.find(l,f[m].location);d=mb(kb(u.content));for(p=0;p<d.length;++p){g=d[p];if(g.id==m)v=g}m=_b(vb(v.messages[0].data)[2][0].data);u=Ke.find(l,f[m].location);d=mb(kb(u.content));for(p=0;p<d.length;++p){g=d[p];if(g.id==m)v=g}m=_b(vb(v.messages[0].data)[2][0].data);u=Ke.find(l,f[m].location);d=mb(kb(u.content));for(p=0;p<d.length;++p){g=d[p];if(g.id==m)v=g}var b=vb(v.messages[0].data);{b[6][0].data=ub(a.e.r+1);b[7][0].data=ub(a.e.c+1);var w=_b(b[46][0].data);var k=Ke.find(l,f[w].location);var T=mb(kb(k.content));{for(var A=0;A<T.length;++A){if(T[A].id==w)break}if(T[A].id!=w)throw"Bad ColumnRowUIDMapArchive";var E=vb(T[A].messages[0].data);E[1]=[];E[2]=[],E[3]=[];for(var C=0;C<=a.e.c;++C){var y=[];y[1]=y[2]=[{type:0,data:ub(C+420690)}];E[1].push({type:2,data:pb(y)});E[2].push({type:0,data:ub(C)});E[3].push({type:0,data:ub(C)})}E[4]=[];E[5]=[],E[6]=[];for(var S=0;S<=a.e.r;++S){y=[];y[1]=y[2]=[{type:0,data:ub(S+726270)}];E[4].push({type:2,data:pb(y)});E[5].push({type:0,data:ub(S)});E[6].push({type:0,data:ub(S)})}T[A].messages[0].data=pb(E)}k.content=Tb(bb(T));k.size=k.content.length;delete b[46];var _=vb(b[4][0].data);{_[7][0].data=ub(a.e.r+1);var x=vb(_[1][0].data);var O=_b(x[2][0].data);k=Ke.find(l,f[O].location);T=mb(kb(k.content));{if(T[0].id!=O)throw"Bad HeaderStorageBucket";var R=vb(T[0].messages[0].data);for(S=0;S<i.length;++S){var I=vb(R[2][0].data);I[1][0].data=ub(S);I[4][0].data=ub(i[S].length);R[2][S]={type:R[2][0].type,data:pb(I)}}T[0].messages[0].data=pb(R)}k.content=Tb(bb(T));k.size=k.content.length;var N=_b(_[2][0].data);k=Ke.find(l,f[N].location);T=mb(kb(k.content));{if(T[0].id!=N)throw"Bad HeaderStorageBucket";R=vb(T[0].messages[0].data);for(C=0;C<=a.e.c;++C){I=vb(R[2][0].data);I[1][0].data=ub(C);I[4][0].data=ub(a.e.r+1);R[2][C]={type:R[2][0].type,data:pb(I)}}T[0].messages[0].data=pb(R)}k.content=Tb(bb(T));k.size=k.content.length;var D=_b(_[4][0].data);(function(){var e=Ke.find(l,f[D].location);var r=mb(kb(e.content));var t;for(var a=0;a<r.length;++a){var n=r[a];if(n.id==D)t=n}var i=vb(t.messages[0].data);{i[3]=[];var o=[];s.forEach(function(e,r){o[1]=[{type:0,data:ub(r)}];o[2]=[{type:0,data:ub(1)}];o[3]=[{type:2,data:ib(e)}];i[3].push({type:2,data:pb(o)})})}t.messages[0].data=pb(i);var c=bb(r);var h=Tb(c);e.content=h;e.size=e.content.length})();var F=vb(_[3][0].data);{var P=F[1][0];delete F[2];var L=vb(P.data);{var M=_b(L[2][0].data);(function(){var e=Ke.find(l,f[M].location);var r=mb(kb(e.content));var t;for(var n=0;n<r.length;++n){var o=r[n];if(o.id==M)t=o}var c=vb(t.messages[0].data);{delete c[6];delete F[7];var h=new Uint8Array(c[5][0].data);c[5]=[];var u=0;for(var d=0;d<=a.e.r;++d){var v=vb(h);u+=Mb(v,i[d],s);v[1][0].data=ub(d);c[5].push({data:pb(v),type:2})}c[1]=[{type:0,data:ub(a.e.c+1)}];c[2]=[{type:0,data:ub(a.e.r+1)}];c[3]=[{type:0,data:ub(u)}];c[4]=[{type:0,data:ub(a.e.r+1)}]}t.messages[0].data=pb(c);var p=bb(r);var g=Tb(p);e.content=g;e.size=e.content.length})()}P.data=pb(L)}_[3][0].data=pb(F)}b[4][0].data=pb(_)}v.messages[0].data=pb(b);var U=bb(d);var B=Tb(U);u.content=B;u.size=u.content.length;return l}function Bb(e){return function r(t){for(var a=0;a!=e.length;++a){var n=e[a];if(t[n[0]]===undefined)t[n[0]]=n[1];if(n[2]==="n")t[n[0]]=Number(t[n[0]])}}}function Wb(e){Bb([["cellNF",false],["cellHTML",true],["cellFormula",true],["cellStyles",false],["cellText",true],["cellDates",false],["sheetStubs",false],["sheetRows",0,"n"],["bookDeps",false],["bookSheets",false],["bookProps",false],["bookFiles",false],["bookVBA",false],["password",""],["WTF",false]])(e)}function Hb(e){Bb([["cellDates",false],["bookSST",false],["bookType","xlsx"],["compression",false],["WTF",false]])(e)}function zb(e){if(qn.WS.indexOf(e)>-1)return"sheet";if(qn.CS&&e==qn.CS)return"chart";if(qn.DS&&e==qn.DS)return"dialog";if(qn.MS&&e==qn.MS)return"macro";return e&&e.length?e:"sheet"}function Vb(e,r){if(!e)return 0;try{e=r.map(function a(r){if(!r.id)r.id=r.strRelID;return[r.name,e["!id"][r.id].Target,zb(e["!id"][r.id].Type)]})}catch(t){return null}return!e||e.length===0?null:e}function Gb(e,r,t,a,n,i,s,f,o,l,c,h){try{i[a]=Qn(Rr(e,t,true),r);var u=Or(e,r);var d;switch(f){case"sheet":d=pg(u,r,n,o,i[a],l,c,h);break;case"chart":d=gg(u,r,n,o,i[a],l,c,h);if(!d||!d["!drawel"])break;var v=Lr(d["!drawel"].Target,r);var p=Zn(v);var g=th(Rr(e,v,true),Qn(Rr(e,p,true),v));var m=Lr(g,v);var b=Zn(m);d=Pp(Rr(e,m,true),m,o,Qn(Rr(e,b,true),m),l,d);break;case"macro":d=mg(u,r,n,o,i[a],l,c,h);break;case"dialog":d=bg(u,r,n,o,i[a],l,c,h);break;default:throw new Error("Unrecognized sheet type "+f);}s[a]=d;var w=[];if(i&&i[a])rr(i[a]).forEach(function(t){var n="";if(i[a][t].Type==qn.CMNT){n=Lr(i[a][t].Target,r);var s=Ag(Or(e,n,true),n,o);if(!s||!s.length)return;ih(d,s,false)}if(i[a][t].Type==qn.TCMNT){n=Lr(i[a][t].Target,r);w=w.concat(oh(Or(e,n,true),o))}});if(w&&w.length)ih(d,w,true,o.people||[])}catch(k){if(o.WTF)throw k}}function jb(e){return e.charAt(0)=="/"?e.slice(1):e}function Xb(e,r){ze();r=r||{};Wb(r);if(_r(e,"META-INF/manifest.xml"))return Zm(e,r);if(_r(e,"objectdata.xml"))return Zm(e,r);if(_r(e,"Index/Document.iwa")){if(typeof Uint8Array=="undefined")throw new Error("NUMBERS file parsing requires Uint8Array support");if(typeof Lb!="undefined"){if(e.FileIndex)return Lb(e);var t=Ke.utils.cfb_new();Nr(e).forEach(function(r){Dr(t,r,Ir(e,r))});return Lb(t)}throw new Error("Unsupported NUMBERS file")}if(!_r(e,"[Content_Types].xml")){if(_r(e,"index.xml.gz"))throw new Error("Unsupported NUMBERS 08 file");if(_r(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Error("Unsupported ZIP file")}var a=Nr(e);var n=Kn(Rr(e,"[Content_Types].xml"));var i=false;var s,f;if(n.workbooks.length===0){f="xl/workbook.xml";if(Or(e,f,true))n.workbooks.push(f)}if(n.workbooks.length===0){f="xl/workbook.bin";if(!Or(e,f,true))throw new Error("Could not find workbook");n.workbooks.push(f);i=true}if(n.workbooks[0].slice(-3)=="bin")i=true;var o={};var l={};if(!r.bookSheets&&!r.bookProps){xd=[];if(n.sst)try{xd=Tg(Or(e,jb(n.sst)),n.sst,r)}catch(c){if(r.WTF)throw c}if(r.cellStyles&&n.themes.length)o=kg(Rr(e,n.themes[0].replace(/^\//,""),true)||"",n.themes[0],r);if(n.style)l=wg(Or(e,jb(n.style)),n.style,o,r)}n.links.map(function(t){try{var a=Qn(Rr(e,Zn(jb(t))),t);return Cg(Or(e,jb(t)),a,t,r)}catch(n){}});var h=vg(Or(e,jb(n.workbooks[0])),n.workbooks[0],r);var u={},d="";if(n.coreprops.length){d=Or(e,jb(n.coreprops[0]),true);if(d)u=hi(d);if(n.extprops.length!==0){d=Or(e,jb(n.extprops[0]),true);if(d)mi(d,u,r)}}var v={};if(!r.bookSheets||r.bookProps){if(n.custprops.length!==0){d=Rr(e,jb(n.custprops[0]),true);if(d)v=ki(d,r)}}var p={};if(r.bookSheets||r.bookProps){if(h.Sheets)s=h.Sheets.map(function I(e){return e.name});else if(u.Worksheets&&u.SheetNames.length>0)s=u.SheetNames;if(r.bookProps){p.Props=u;p.Custprops=v}if(r.bookSheets&&typeof s!=="undefined")p.SheetNames=s;if(r.bookSheets?p.SheetNames:r.bookProps)return p}s={};var g={};if(r.bookDeps&&n.calcchain)g=Eg(Or(e,jb(n.calcchain)),n.calcchain,r);var m=0;var b={};var w,k;{var T=h.Sheets;u.Worksheets=T.length;u.SheetNames=[];for(var A=0;A!=T.length;++A){u.SheetNames[A]=T[A].name}}var E=i?"bin":"xml";var C=n.workbooks[0].lastIndexOf("/");var y=(n.workbooks[0].slice(0,C+1)+"_rels/"+n.workbooks[0].slice(C+1)+".rels").replace(/^\//,"");if(!_r(e,y))y="xl/_rels/workbook."+E+".rels";var S=Qn(Rr(e,y,true),y.replace(/_rels.*/,"s5s"));if((n.metadata||[]).length>=1){r.xlmeta=yg(Or(e,jb(n.metadata[0])),n.metadata[0],r)}if((n.people||[]).length>=1){r.people=ch(Or(e,jb(n.people[0])),r)}if(S)S=Vb(S,h.Sheets);var _=Or(e,"xl/worksheets/sheet.xml",true)?1:0;e:for(m=0;m!=u.Worksheets;++m){var x="sheet";if(S&&S[m]){w="xl/"+S[m][1].replace(/[\/]?xl\//,"");if(!_r(e,w))w=S[m][1];if(!_r(e,w))w=y.replace(/_rels\/.*$/,"")+S[m][1];x=S[m][2]}else{w="xl/worksheets/sheet"+(m+1-_)+"."+E;w=w.replace(/sheet0\./,"sheet.")}k=w.replace(/^(.*)(\/)([^\/]*)$/,"$1/_rels/$3.rels");if(r&&r.sheets!=null)switch(typeof r.sheets){case"number":if(m!=r.sheets)continue e;break;case"string":if(u.SheetNames[m].toLowerCase()!=r.sheets.toLowerCase())continue e;break;default:if(Array.isArray&&Array.isArray(r.sheets)){var O=false;for(var R=0;R!=r.sheets.length;++R){if(typeof r.sheets[R]=="number"&&r.sheets[R]==m)O=1;if(typeof r.sheets[R]=="string"&&r.sheets[R].toLowerCase()==u.SheetNames[m].toLowerCase())O=1}if(!O)continue e};}Gb(e,w,k,u.SheetNames[m],m,b,s,x,r,h,o,l)}p={Directory:n,Workbook:h,Props:u,Custprops:v,Deps:g,Sheets:s,SheetNames:u.SheetNames,Strings:xd,Styles:l,Themes:o,SSF:br(X)};if(r&&r.bookFiles){if(e.files){p.keys=a;p.files=e.files}else{p.keys=[];p.files={};e.FullPaths.forEach(function(r,t){r=r.replace(/^Root Entry[\/]/,"");p.keys.push(r);p.files[r]=e.FileIndex[t]})}}if(r&&r.bookVBA){if(n.vba.length>0)p.vbaraw=Or(e,jb(n.vba[0]),true);else if(n.defaults&&n.defaults.bin===bh)p.vbaraw=Or(e,"xl/vbaProject.bin",true)}return p}function $b(e,r){var t=r||{};var a="Workbook",n=Ke.find(e,a);try{a="/!DataSpaces/Version";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);Ko(n.content);a="/!DataSpaces/DataSpaceMap";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var i=qo(n.content);if(i.length!==1||i[0].comps.length!==1||i[0].comps[0].t!==0||i[0].name!=="StrongEncryptionDataSpace"||i[0].comps[0].v!=="EncryptedPackage")throw new Error("ECMA-376 Encrypted file bad "+a);a="/!DataSpaces/DataSpaceInfo/StrongEncryptionDataSpace";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var s=Zo(n.content);if(s.length!=1||s[0]!="StrongEncryptionTransform")throw new Error("ECMA-376 Encrypted file bad "+a);a="/!DataSpaces/TransformInfo/StrongEncryptionTransform/!Primary";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);el(n.content)}catch(f){}a="/EncryptionInfo";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var o=al(n.content);a="/EncryptedPackage";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);if(o[0]==4&&typeof decrypt_agile!=="undefined")return decrypt_agile(o[1],n.content,t.password||"",t);if(o[0]==2&&typeof decrypt_std76!=="undefined")return decrypt_std76(o[1],n.content,t.password||"",t);throw new Error("File is password-protected")}function Yb(e,r){if(r.bookType=="ods")return tb(e,r);if(r.bookType=="numbers")return Ub(e,r);if(r.bookType=="xlsb")return Kb(e,r);return Jb(e,r)}function Kb(e,r){ah=1024;if(e&&!e.SSF){e.SSF=br(X)}if(e&&e.SSF){ze();He(e.SSF);r.revssf=nr(e.SSF);r.revssf[e.SSF[65535]]=0;r.ssf=e.SSF}r.rels={};r.wbrels={};r.Strings=[];r.Strings.Count=0;r.Strings.Unique=0;if(Rd)r.revStrings=new Map;else{r.revStrings={};r.revStrings.foo=[];delete r.revStrings.foo}var t=r.bookType=="xlsb"?"bin":"xml";var a=Th.indexOf(r.bookType)>-1;var n=Yn();Hb(r=r||{});var i=Fr();var s="",f=0;r.cellXfs=[];Fd(r.cellXfs,{},{revssf:{General:0}});if(!e.Props)e.Props={};s="docProps/core.xml";Dr(i,s,di(e.Props,r));n.coreprops.push(s);ri(r.rels,2,s,qn.CORE_PROPS);s="docProps/app.xml";if(e.Props&&e.Props.SheetNames){}else if(!e.Workbook||!e.Workbook.Sheets)e.Props.SheetNames=e.SheetNames;else{var o=[];for(var l=0;l<e.SheetNames.length;++l)if((e.Workbook.Sheets[l]||{}).Hidden!=2)o.push(e.SheetNames[l]);e.Props.SheetNames=o}e.Props.Worksheets=e.Props.SheetNames.length;Dr(i,s,bi(e.Props,r));n.extprops.push(s);ri(r.rels,3,s,qn.EXT_PROPS);if(e.Custprops!==e.Props&&rr(e.Custprops||{}).length>0){s="docProps/custom.xml";Dr(i,s,Ti(e.Custprops,r));n.custprops.push(s);ri(r.rels,4,s,qn.CUST_PROPS)}for(f=1;f<=e.SheetNames.length;++f){var c={"!id":{}};var h=e.Sheets[e.SheetNames[f-1]];var u=(h||{})["!type"]||"sheet";switch(u){case"chart":;default:s="xl/worksheets/sheet"+f+"."+t;Dr(i,s,_g(f-1,s,r,e,c));n.sheets.push(s);ri(r.wbrels,-1,"worksheets/sheet"+f+"."+t,qn.WS[0]);}if(h){var d=h["!comments"];var v=false;var p="";if(d&&d.length>0){p="xl/comments"+f+"."+t;Dr(i,p,Ig(d,p,r));n.comments.push(p);ri(c,-1,"../comments"+f+"."+t,qn.CMNT);v=true}if(h["!legacy"]){if(v)Dr(i,"xl/drawings/vmlDrawing"+f+".vml",nh(f,h["!comments"]))}delete h["!comments"];delete h["!legacy"]}if(c["!id"].rId1)Dr(i,Zn(s),ei(c))}if(r.Strings!=null&&r.Strings.length>0){s="xl/sharedStrings."+t;Dr(i,s,Rg(r.Strings,s,r));n.strs.push(s);ri(r.wbrels,-1,"sharedStrings."+t,qn.SST)}s="xl/workbook."+t;Dr(i,s,Sg(e,s,r));n.workbooks.push(s);ri(r.rels,1,s,qn.WB);s="xl/theme/theme1.xml";Dr(i,s,Ic(e.Themes,r));n.themes.push(s);ri(r.wbrels,-1,"theme/theme1.xml",qn.THEME);s="xl/styles."+t;Dr(i,s,Og(e,s,r));n.styles.push(s);ri(r.wbrels,-1,"styles."+t,qn.STY);if(e.vbaraw&&a){s="xl/vbaProject.bin";Dr(i,s,e.vbaraw);n.vba.push(s);ri(r.wbrels,-1,"vbaProject.bin",qn.VBA)}s="xl/metadata."+t;Dr(i,s,Ng(s));n.metadata.push(s);ri(r.wbrels,-1,"metadata."+t,qn.XLMETA);Dr(i,"[Content_Types].xml",Jn(n,r));Dr(i,"_rels/.rels",ei(r.rels));Dr(i,"xl/_rels/workbook."+t+".rels",ei(r.wbrels));delete r.revssf;delete r.ssf;return i}function Jb(e,r){ah=1024;if(e&&!e.SSF){e.SSF=br(X)}if(e&&e.SSF){ze();He(e.SSF);r.revssf=nr(e.SSF);r.revssf[e.SSF[65535]]=0;r.ssf=e.SSF}r.rels={};r.wbrels={};r.Strings=[];r.Strings.Count=0;r.Strings.Unique=0;if(Rd)r.revStrings=new Map;else{r.revStrings={};r.revStrings.foo=[];delete r.revStrings.foo}var t="xml";var a=Th.indexOf(r.bookType)>-1;var n=Yn();Hb(r=r||{});var i=Fr();var s="",f=0;r.cellXfs=[];Fd(r.cellXfs,{},{revssf:{General:0}});if(!e.Props)e.Props={};s="docProps/core.xml";Dr(i,s,di(e.Props,r));n.coreprops.push(s);ri(r.rels,2,s,qn.CORE_PROPS);s="docProps/app.xml";if(e.Props&&e.Props.SheetNames){}else if(!e.Workbook||!e.Workbook.Sheets)e.Props.SheetNames=e.SheetNames;else{var o=[];for(var l=0;l<e.SheetNames.length;++l)if((e.Workbook.Sheets[l]||{}).Hidden!=2)o.push(e.SheetNames[l]);e.Props.SheetNames=o}e.Props.Worksheets=e.Props.SheetNames.length;Dr(i,s,bi(e.Props,r));n.extprops.push(s);ri(r.rels,3,s,qn.EXT_PROPS);if(e.Custprops!==e.Props&&rr(e.Custprops||{}).length>0){s="docProps/custom.xml";Dr(i,s,Ti(e.Custprops,r));n.custprops.push(s);ri(r.rels,4,s,qn.CUST_PROPS)}var c=["SheetJ5"];r.tcid=0;for(f=1;f<=e.SheetNames.length;++f){var h={"!id":{}};var u=e.Sheets[e.SheetNames[f-1]];var d=(u||{})["!type"]||"sheet";switch(d){case"chart":;default:s="xl/worksheets/sheet"+f+"."+t;Dr(i,s,pv(f-1,r,e,h));n.sheets.push(s);ri(r.wbrels,-1,"worksheets/sheet"+f+"."+t,qn.WS[0]);}if(u){var v=u["!comments"];var p=false;var g="";if(v&&v.length>0){var m=false;v.forEach(function(e){e[1].forEach(function(e){if(e.T==true)m=true})});if(m){g="xl/threadedComments/threadedComment"+f+"."+t;Dr(i,g,lh(v,c,r));n.threadedcomments.push(g);ri(h,-1,"../threadedComments/threadedComment"+f+"."+t,qn.TCMNT)}g="xl/comments"+f+"."+t;Dr(i,g,fh(v,r));n.comments.push(g);ri(h,-1,"../comments"+f+"."+t,qn.CMNT);p=true}if(u["!legacy"]){if(p)Dr(i,"xl/drawings/vmlDrawing"+f+".vml",nh(f,u["!comments"]))}delete u["!comments"];delete u["!legacy"]}if(h["!id"].rId1)Dr(i,Zn(s),ei(h))}if(r.Strings!=null&&r.Strings.length>0){s="xl/sharedStrings."+t;Dr(i,s,Ho(r.Strings,r));n.strs.push(s);ri(r.wbrels,-1,"sharedStrings."+t,qn.SST)}s="xl/workbook."+t;Dr(i,s,rg(e,r));n.workbooks.push(s);ri(r.rels,1,s,qn.WB);s="xl/theme/theme1.xml";Dr(i,s,Ic(e.Themes,r));n.themes.push(s);ri(r.wbrels,-1,"theme/theme1.xml",qn.THEME);s="xl/styles."+t;Dr(i,s,$l(e,r));n.styles.push(s);ri(r.wbrels,-1,"styles."+t,qn.STY);if(e.vbaraw&&a){s="xl/vbaProject.bin";Dr(i,s,e.vbaraw);n.vba.push(s);ri(r.wbrels,-1,"vbaProject.bin",qn.VBA)}s="xl/metadata."+t;Dr(i,s,Jc());n.metadata.push(s);ri(r.wbrels,-1,"metadata."+t,qn.XLMETA);if(c.length>1){s="xl/persons/person.xml";Dr(i,s,hh(c,r));n.people.push(s);ri(r.wbrels,-1,"persons/person.xml",qn.PEOPLE)}Dr(i,"[Content_Types].xml",Jn(n,r));Dr(i,"_rels/.rels",ei(r.rels));Dr(i,"xl/_rels/workbook."+t+".rels",ei(r.wbrels));delete r.revssf;delete r.ssf;return i}function qb(e,r){var t="";switch((r||{}).type||"base64"){case"buffer":return[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]];case"base64":t=k(e.slice(0,12));break;case"binary":t=e;break;case"array":return[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]];default:throw new Error("Unrecognized type "+(r&&r.type||"undefined"));}return[t.charCodeAt(0),t.charCodeAt(1),t.charCodeAt(2),t.charCodeAt(3),t.charCodeAt(4),t.charCodeAt(5),t.charCodeAt(6),t.charCodeAt(7)]}function Zb(e,r){if(Ke.find(e,"EncryptedPackage"))return $b(e,r);return vm(e,r)}function Qb(e,r){var t,a=e;var n=r||{};if(!n.type)n.type=T&&Buffer.isBuffer(e)?"buffer":"base64";t=Pr(a,n);return Xb(t,n)}function ew(e,r){var t=0;e:while(t<e.length)switch(e.charCodeAt(t)){case 10:;case 13:;case 32:++t;break;case 60:return jg(e.slice(t),r);default:break e;}return So.to_workbook(e,r)}function rw(e,r){var t="",a=qb(e,r);switch(r.type){case"base64":t=k(e);break;case"binary":t=e;break;case"buffer":t=e.toString("binary");break;case"array":t=mr(e);break;default:throw new Error("Unrecognized type "+r.type);}if(a[0]==239&&a[1]==187&&a[2]==191)t=lt(t);r.type="binary";return ew(t,r)}function tw(e,r){var t=e;if(r.type=="base64")t=k(t);t=a.utils.decode(1200,t.slice(2),"str");r.type="binary";return ew(t,r)}function aw(e){return!e.match(/[^\x00-\x7F]/)?e:ct(e)}function nw(e,r,t,a){if(a){t.type="string";return So.to_workbook(e,t)}return So.to_workbook(r,t)}function iw(e,r){l();var t=r||{};if(typeof ArrayBuffer!=="undefined"&&e instanceof ArrayBuffer)return iw(new Uint8Array(e),(t=br(t),t.type="array",t));if(typeof Uint8Array!=="undefined"&&e instanceof Uint8Array&&!t.type)t.type=typeof Deno!=="undefined"?"buffer":"array";var a=e,n=[0,0,0,0],i=false;if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}Od={};if(t.dateNF)Od.dateNF=t.dateNF;if(!t.type)t.type=T&&Buffer.isBuffer(e)?"buffer":"base64";if(t.type=="file"){t.type=T?"buffer":"binary";a=er(e);if(typeof Uint8Array!=="undefined"&&!T)t.type="array"}if(t.type=="string"){i=true;t.type="binary";t.codepage=65001;a=aw(e)}if(t.type=="array"&&typeof Uint8Array!=="undefined"&&e instanceof Uint8Array&&typeof ArrayBuffer!=="undefined"){var s=new ArrayBuffer(3),f=new Uint8Array(s);f.foo="bar";if(!f.foo){t=br(t);t.type="array";return iw(O(a),t)}}switch((n=qb(a,t))[0]){case 208:if(n[1]===207&&n[2]===17&&n[3]===224&&n[4]===161&&n[5]===177&&n[6]===26&&n[7]===225)return Zb(Ke.read(a,t),t);break;case 9:if(n[1]<=8)return vm(a,t);break;case 60:return jg(a,t);case 73:if(n[1]===73&&n[2]===42&&n[3]===0)throw new Error("TIFF Image File is not a spreadsheet");if(n[1]===68)return _o(a,t);break;case 84:if(n[1]===65&&n[2]===66&&n[3]===76)return Co.to_workbook(a,t);break;case 80:return n[1]===75&&n[2]<9&&n[3]<9?Qb(a,t):nw(e,a,t,i);case 239:return n[3]===60?jg(a,t):nw(e,a,t,i);case 255:if(n[1]===254){return tw(a,t)}else if(n[1]===0&&n[2]===2&&n[3]===0)return xo.to_workbook(a,t);break;case 0:if(n[1]===0){if(n[2]>=2&&n[3]===0)return xo.to_workbook(a,t);if(n[2]===0&&(n[3]===8||n[3]===9))return xo.to_workbook(a,t)}break;case 3:;case 131:;case 139:;case 140:return Ao.to_workbook(a,t);case 123:if(n[1]===92&&n[2]===114&&n[3]===116)return gl.to_workbook(a,t);break;case 10:;case 13:;case 32:return rw(a,t);case 137:if(n[1]===80&&n[2]===78&&n[3]===71)throw new Error("PNG Image File is not a spreadsheet");break;}if(To.indexOf(n[0])>-1&&n[2]<=12&&n[3]<=31)return Ao.to_workbook(a,t);return nw(e,a,t,i)}function sw(e,r){var t=r||{};t.type="file";return iw(e,t)}function fw(e,r){switch(r.type){case"base64":;case"binary":break;case"buffer":;case"array":r.type="";break;case"file":return Qe(r.file,Ke.write(e,{type:T?"buffer":""}));case"string":throw new Error("'string' output type invalid for '"+r.bookType+"' files");default:throw new Error("Unrecognized type "+r.type);}return Ke.write(e,r)}function ow(e,r){var t=br(r||{});var a=Yb(e,t);return cw(a,t)}function lw(e,r){var t=br(r||{});var a=Jb(e,t);return cw(a,t)}function cw(e,r){var t={};var a=T?"nodebuffer":typeof Uint8Array!=="undefined"?"array":"string";if(r.compression)t.compression="DEFLATE";if(r.password)t.type=a;else switch(r.type){case"base64":t.type="base64";break;case"binary":t.type="string";break;case"string":throw new Error("'string' output type invalid for '"+r.bookType+"' files");case"buffer":;case"file":t.type=a;break;default:throw new Error("Unrecognized type "+r.type);}var n=e.FullPaths?Ke.write(e,{fileType:"zip",type:{nodebuffer:"buffer",string:"binary"}[t.type]||t.type,compression:!!r.compression}):e.generate(t);if(typeof Deno!=="undefined"){if(typeof n=="string"){if(r.type=="binary"||r.type=="base64")return n;n=new Uint8Array(S(n))}}if(r.password&&typeof encrypt_agile!=="undefined")return fw(encrypt_agile(n,r.password),r);if(r.type==="file")return Qe(r.file,n);return r.type=="string"?lt(n):n}function hw(e,r){var t=r||{};var a=pm(e,t);return fw(a,t)}function uw(e,r,t){if(!t)t="";var a=t+e;switch(r.type){case"base64":return w(ct(a));case"binary":return ct(a);case"string":return e;case"file":return Qe(r.file,a,"utf8");case"buffer":{if(T)return A(a,"utf8");else if(typeof TextEncoder!=="undefined")return(new TextEncoder).encode(a);else return uw(a,{type:"binary"}).split("").map(function(e){return e.charCodeAt(0)})};}throw new Error("Unrecognized type "+r.type)}function dw(e,r){switch(r.type){case"base64":return w(e);case"binary":return e;case"string":return e;case"file":return Qe(r.file,e,"binary");case"buffer":{if(T)return A(e,"binary");else return e.split("").map(function(e){return e.charCodeAt(0)})};}throw new Error("Unrecognized type "+r.type)}function vw(e,r){switch(r.type){case"string":;case"base64":;case"binary":var t="";for(var a=0;a<e.length;++a)t+=String.fromCharCode(e[a]);return r.type=="base64"?w(t):r.type=="string"?lt(t):t;case"file":return Qe(r.file,e);case"buffer":return e;default:throw new Error("Unrecognized type "+r.type);}}function pw(e,r){l();Zp(e);var t=br(r||{});if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=pw(e,t);t.type="array";return S(a)}return lw(e,t)}function gw(e,r){l();Zp(e);var t=br(r||{});if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=gw(e,t);t.type="array";return S(a)}var n=0;if(t.sheet){if(typeof t.sheet=="number")n=t.sheet;else n=e.SheetNames.indexOf(t.sheet);if(!e.SheetNames[n])throw new Error("Sheet not found: "+t.sheet+" : "+typeof t.sheet)}switch(t.bookType||"xlsb"){case"xml":;case"xlml":return uw(nm(e,t),t);case"slk":;case"sylk":return uw(Eo.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"htm":;case"html":return uw(Vm(e.Sheets[e.SheetNames[n]],t),t);case"txt":return dw(Sw(e.Sheets[e.SheetNames[n]],t),t);case"csv":return uw(yw(e.Sheets[e.SheetNames[n]],t),t,"\ufeff");case"dif":return uw(Co.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"dbf":return vw(Ao.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"prn":return uw(So.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"rtf":return uw(gl.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"eth":return uw(yo.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"fods":return uw(tb(e,t),t);case"wk1":return vw(xo.sheet_to_wk1(e.Sheets[e.SheetNames[n]],t),t);case"wk3":return vw(xo.book_to_wk3(e,t),t);case"biff2":if(!t.biff)t.biff=2;case"biff3":if(!t.biff)t.biff=3;case"biff4":if(!t.biff)t.biff=4;return vw(Lm(e,t),t);case"biff5":if(!t.biff)t.biff=5;case"biff8":;case"xla":;case"xls":if(!t.biff)t.biff=8;return hw(e,t);case"xlsx":;case"xlsm":;case"xlam":;case"xlsb":;case"numbers":;case"ods":return ow(e,t);default:throw new Error("Unrecognized bookType |"+t.bookType+"|");}}function mw(e){if(e.bookType)return;var r={xls:"biff8",htm:"html",slk:"sylk",socialcalc:"eth",Sh33tJS:"WTF"};var t=e.file.slice(e.file.lastIndexOf(".")).toLowerCase();if(t.match(/^\.[a-z]+$/))e.bookType=t.slice(1);e.bookType=r[e.bookType]||e.bookType}function bw(e,r,t){var a=t||{};a.type="file";a.file=r;mw(a);return gw(e,a)}function ww(e,r,t){var a=t||{};a.type="file";a.file=r;mw(a);return pw(e,a)}function kw(e,r,t,a){var n=t||{};n.type="file";n.file=e;mw(n);n.type="buffer";var i=a;if(!(i instanceof Function))i=t;return Je.writeFile(e,gw(r,n),i)}function Tw(e,r,t,a,n,i,s,f){var o=Ta(t);var l=f.defval,c=f.raw||!Object.prototype.hasOwnProperty.call(f,"raw");var h=true;var u=n===1?[]:{};if(n!==1){if(Object.defineProperty)try{Object.defineProperty(u,"__rowNum__",{value:t,enumerable:false})}catch(d){u.__rowNum__=t}else u.__rowNum__=t}if(!s||e[t])for(var v=r.s.c;v<=r.e.c;++v){var p=s?e[t][v]:e[a[v]+o];if(p===undefined||p.t===undefined){if(l===undefined)continue;if(i[v]!=null){u[i[v]]=l}continue}var g=p.v;switch(p.t){case"z":if(g==null)break;continue;case"e":g=g==0?null:void 0;break;case"s":;case"d":;case"b":;case"n":break;default:throw new Error("unrecognized type "+p.t);}if(i[v]!=null){if(g==null){if(p.t=="e"&&g===null)u[i[v]]=null;else if(l!==undefined)u[i[v]]=l;else if(c&&g===null)u[i[v]]=null;else continue}else{u[i[v]]=c&&(p.t!=="n"||p.t==="n"&&f.rawNumbers!==false)?g:Pa(p,g,f)}if(g!=null)h=false}}return{row:u,isempty:h}}function Aw(e,r){if(e==null||e["!ref"]==null)return[];var t={t:"n",v:0},a=0,n=1,i=[],s=0,f="";var o={s:{r:0,c:0},e:{r:0,c:0}};var l=r||{};var c=l.range!=null?l.range:e["!ref"];if(l.header===1)a=1;else if(l.header==="A")a=2;else if(Array.isArray(l.header))a=3;else if(l.header==null)a=0;switch(typeof c){case"string":o=Da(c);break;case"number":o=Da(e["!ref"]);o.s.r=c;break;default:o=c;}if(a>0)n=0;var h=Ta(o.s.r);var u=[];var d=[];var v=0,p=0;var g=Array.isArray(e);var m=o.s.r,b=0;var w={};if(g&&!e[m])e[m]=[];var k=l.skipHidden&&e["!cols"]||[];var T=l.skipHidden&&e["!rows"]||[];for(b=o.s.c;b<=o.e.c;++b){if((k[b]||{}).hidden)continue;u[b]=ya(b);t=g?e[m][b]:e[u[b]+h];switch(a){case 1:i[b]=b-o.s.c;break;case 2:i[b]=u[b];break;case 3:i[b]=l.header[b-o.s.c];break;default:if(t==null)t={w:"__EMPTY",t:"s"};f=s=Pa(t,null,l);p=w[s]||0;if(!p)w[s]=1;else{do{f=s+"_"+p++}while(w[f]);w[s]=p;w[f]=1}i[b]=f;}}for(m=o.s.r+n;m<=o.e.r;++m){if((T[m]||{}).hidden)continue;var A=Tw(e,o,m,u,a,i,g,l);if(A.isempty===false||(a===1?l.blankrows!==false:!!l.blankrows))d[v++]=A.row}d.length=v;return d}var Ew=/"/g;function Cw(e,r,t,a,n,i,s,f){var o=true;var l=[],c="",h=Ta(t);for(var u=r.s.c;u<=r.e.c;++u){if(!a[u])continue;var d=f.dense?(e[t]||[])[u]:e[a[u]+h];if(d==null)c="";else if(d.v!=null){o=false;c=""+(f.rawNumbers&&d.t=="n"?d.v:Pa(d,null,f));for(var v=0,p=0;v!==c.length;++v)if((p=c.charCodeAt(v))===n||p===i||p===34||f.forceQuotes){c='"'+c.replace(Ew,'""')+'"';break}if(c=="ID")c='"ID"'}else if(d.f!=null&&!d.F){o=false;c="="+d.f;if(c.indexOf(",")>=0)c='"'+c.replace(Ew,'""')+'"'}else c="";l.push(c)}if(f.blankrows===false&&o)return null;return l.join(s)}function yw(e,r){var t=[];var a=r==null?{}:r;if(e==null||e["!ref"]==null)return"";var n=Da(e["!ref"]);var i=a.FS!==undefined?a.FS:",",s=i.charCodeAt(0);var f=a.RS!==undefined?a.RS:"\n",o=f.charCodeAt(0);var l=new RegExp((i=="|"?"\\|":i)+"+$");var c="",h=[];a.dense=Array.isArray(e);var u=a.skipHidden&&e["!cols"]||[];var d=a.skipHidden&&e["!rows"]||[];for(var v=n.s.c;v<=n.e.c;++v)if(!(u[v]||{}).hidden)h[v]=ya(v);var p=0;for(var g=n.s.r;g<=n.e.r;++g){if((d[g]||{}).hidden)continue;c=Cw(e,n,g,h,s,o,i,a);if(c==null){continue}if(a.strip)c=c.replace(l,"");if(c||a.blankrows!==false)t.push((p++?f:"")+c)}delete a.dense;return t.join("")}function Sw(e,r){if(!r)r={};r.FS="\t";r.RS="\n";var t=yw(e,r);if(typeof a=="undefined"||r.type=="string")return t;var n=a.utils.encode(1200,t,"str");return String.fromCharCode(255)+String.fromCharCode(254)+n}function _w(e){var r="",t,a="";if(e==null||e["!ref"]==null)return[];var n=Da(e["!ref"]),i="",s=[],f;
 var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.s.r;c<=n.e.r;++c){i=Ta(c);for(f=n.s.c;f<=n.e.c;++f){r=s[f]+i;t=l?(e[c]||[])[f]:e[r];a="";if(t===undefined)continue;else if(t.F!=null){r=t.F;if(!t.f)continue;a=t.f;if(r.indexOf(":")==-1)r=r+":"+r}if(t.f!=null)a=t.f;else if(t.t=="z")continue;else if(t.t=="n"&&t.v!=null)a=""+t.v;else if(t.t=="b")a=t.v?"TRUE":"FALSE";else if(t.w!==undefined)a="'"+t.w;else if(t.v===undefined)continue;else if(t.t=="s")a="'"+t.v;else a=""+t.v;o[o.length]=r+"="+a}}return o}function xw(e,r,t){var a=t||{};var n=+!a.skipHeader;var i=e||{};var s=0,f=0;if(i&&a.origin!=null){if(typeof a.origin=="number")s=a.origin;else{var o=typeof a.origin=="string"?Oa(a.origin):a.origin;s=o.r;f=o.c}}var l;var c={s:{c:0,r:0},e:{c:f,r:s+r.length-1+n}};if(i["!ref"]){var h=Da(i["!ref"]);c.e.c=Math.max(c.e.c,h.e.c);c.e.r=Math.max(c.e.r,h.e.r);if(s==-1){s=h.e.r+1;c.e.r=s+r.length-1+n}}else{if(s==-1){s=0;c.e.r=r.length-1+n}}var u=a.header||[],d=0;r.forEach(function(e,r){rr(e).forEach(function(t){if((d=u.indexOf(t))==-1)u[d=u.length]=t;var o=e[t];var c="z";var h="";var v=Ra({c:f+d,r:s+r+n});l=Rw(i,v);if(o&&typeof o==="object"&&!(o instanceof Date)){i[v]=o}else{if(typeof o=="number")c="n";else if(typeof o=="boolean")c="b";else if(typeof o=="string")c="s";else if(o instanceof Date){c="d";if(!a.cellDates){c="n";o=fr(o)}h=a.dateNF||X[14]}else if(o===null&&a.nullError){c="e";o=0}if(!l)i[v]=l={t:c,v:o};else{l.t=c;l.v=o;delete l.w;delete l.R;if(h)l.z=h}if(h)l.z=h}})});c.e.c=Math.max(c.e.c,f+u.length-1);var v=Ta(s);if(n)for(d=0;d<u.length;++d)i[ya(d+f)+v]={t:"s",v:u[d]};i["!ref"]=Na(c);return i}function Ow(e,r){return xw(null,e,r)}function Rw(e,r,t){if(typeof r=="string"){if(Array.isArray(e)){var a=Oa(r);if(!e[a.r])e[a.r]=[];return e[a.r][a.c]||(e[a.r][a.c]={t:"z"})}return e[r]||(e[r]={t:"z"})}if(typeof r!="number")return Rw(e,Ra(r));return Rw(e,Ra({r:r,c:t||0}))}function Iw(e,r){if(typeof r=="number"){if(r>=0&&e.SheetNames.length>r)return r;throw new Error("Cannot find sheet # "+r)}else if(typeof r=="string"){var t=e.SheetNames.indexOf(r);if(t>-1)return t;throw new Error("Cannot find sheet name |"+r+"|")}else throw new Error("Cannot find sheet |"+r+"|")}function Nw(){return{SheetNames:[],Sheets:{}}}function Dw(e,r,t,a){var n=1;if(!t)for(;n<=65535;++n,t=undefined)if(e.SheetNames.indexOf(t="Sheet"+n)==-1)break;if(!t||e.SheetNames.length>=65535)throw new Error("Too many worksheets");if(a&&e.SheetNames.indexOf(t)>=0){var i=t.match(/(^.*?)(\d+)$/);n=i&&+i[2]||0;var s=i&&i[1]||t;for(++n;n<=65535;++n)if(e.SheetNames.indexOf(t=s+n)==-1)break}Jp(t);if(e.SheetNames.indexOf(t)>=0)throw new Error("Worksheet with name |"+t+"| already exists!");e.SheetNames.push(t);e.Sheets[t]=r;return t}function Fw(e,r,t){if(!e.Workbook)e.Workbook={};if(!e.Workbook.Sheets)e.Workbook.Sheets=[];var a=Iw(e,r);if(!e.Workbook.Sheets[a])e.Workbook.Sheets[a]={};switch(t){case 0:;case 1:;case 2:break;default:throw new Error("Bad sheet visibility setting "+t);}e.Workbook.Sheets[a].Hidden=t}function Pw(e,r){e.z=r;return e}function Lw(e,r,t){if(!r){delete e.l}else{e.l={Target:r};if(t)e.l.Tooltip=t}return e}function Mw(e,r,t){return Lw(e,"#"+r,t)}function Uw(e,r,t){if(!e.c)e.c=[];e.c.push({t:r,a:t||"SheetJS"})}function Bw(e,r,t,a){var n=typeof r!="string"?r:Da(r);var i=typeof r=="string"?r:Na(r);for(var s=n.s.r;s<=n.e.r;++s)for(var f=n.s.c;f<=n.e.c;++f){var o=Rw(e,s,f);o.t="n";o.F=i;delete o.v;if(s==n.s.r&&f==n.s.c){o.f=t;if(a)o.D=true}}return e}var Ww={encode_col:ya,encode_row:Ta,encode_cell:Ra,encode_range:Na,decode_col:Ca,decode_row:ka,split_cell:xa,decode_cell:Oa,decode_range:Ia,format_cell:Pa,sheet_add_aoa:Ma,sheet_add_json:xw,sheet_add_dom:Gm,aoa_to_sheet:Ua,json_to_sheet:Ow,table_to_sheet:jm,table_to_book:Xm,sheet_to_csv:yw,sheet_to_txt:Sw,sheet_to_json:Aw,sheet_to_html:Vm,sheet_to_formulae:_w,sheet_to_row_object_array:Aw,sheet_get_cell:Rw,book_new:Nw,book_append_sheet:Dw,book_set_sheet_visibility:Fw,cell_set_number_format:Pw,cell_set_hyperlink:Lw,cell_set_internal_link:Mw,cell_add_comment:Uw,sheet_set_array_formula:Bw,consts:{SHEET_VISIBLE:0,SHEET_HIDDEN:1,SHEET_VERY_HIDDEN:2}};var Hw;function zw(e){Hw=e}function Vw(e,r){var t=Hw();var a=r==null?{}:r;if(e==null||e["!ref"]==null){t.push(null);return t}var n=Da(e["!ref"]);var i=a.FS!==undefined?a.FS:",",s=i.charCodeAt(0);var f=a.RS!==undefined?a.RS:"\n",o=f.charCodeAt(0);var l=new RegExp((i=="|"?"\\|":i)+"+$");var c="",h=[];a.dense=Array.isArray(e);var u=a.skipHidden&&e["!cols"]||[];var d=a.skipHidden&&e["!rows"]||[];for(var v=n.s.c;v<=n.e.c;++v)if(!(u[v]||{}).hidden)h[v]=ya(v);var p=n.s.r;var g=false,m=0;t._read=function(){if(!g){g=true;return t.push("\ufeff")}while(p<=n.e.r){++p;if((d[p-1]||{}).hidden)continue;c=Cw(e,n,p-1,h,s,o,i,a);if(c!=null){if(a.strip)c=c.replace(l,"");if(c||a.blankrows!==false)return t.push((m++?f:"")+c)}}return t.push(null)};return t}function Gw(e,r){var t=Hw();var a=r||{};var n=a.header!=null?a.header:Bm;var i=a.footer!=null?a.footer:Wm;t.push(n);var s=Ia(e["!ref"]);a.dense=Array.isArray(e);t.push(zm(e,s,a));var f=s.s.r;var o=false;t._read=function(){if(f>s.e.r){if(!o){o=true;t.push("</table>"+i)}return t.push(null)}while(f<=s.e.r){t.push(Um(e,s,f,a));++f;break}};return t}function jw(e,r){var t=Hw({objectMode:true});if(e==null||e["!ref"]==null){t.push(null);return t}var a={t:"n",v:0},n=0,i=1,s=[],f=0,o="";var l={s:{r:0,c:0},e:{r:0,c:0}};var c=r||{};var h=c.range!=null?c.range:e["!ref"];if(c.header===1)n=1;else if(c.header==="A")n=2;else if(Array.isArray(c.header))n=3;switch(typeof h){case"string":l=Da(h);break;case"number":l=Da(e["!ref"]);l.s.r=h;break;default:l=h;}if(n>0)i=0;var u=Ta(l.s.r);var d=[];var v=0;var p=Array.isArray(e);var g=l.s.r,m=0;var b={};if(p&&!e[g])e[g]=[];var w=c.skipHidden&&e["!cols"]||[];var k=c.skipHidden&&e["!rows"]||[];for(m=l.s.c;m<=l.e.c;++m){if((w[m]||{}).hidden)continue;d[m]=ya(m);a=p?e[g][m]:e[d[m]+u];switch(n){case 1:s[m]=m-l.s.c;break;case 2:s[m]=d[m];break;case 3:s[m]=c.header[m-l.s.c];break;default:if(a==null)a={w:"__EMPTY",t:"s"};o=f=Pa(a,null,c);v=b[f]||0;if(!v)b[f]=1;else{do{o=f+"_"+v++}while(b[o]);b[f]=v;b[o]=1}s[m]=o;}}g=l.s.r+i;t._read=function(){while(g<=l.e.r){if((k[g-1]||{}).hidden)continue;var r=Tw(e,l,g,d,n,s,p,c);++g;if(r.isempty===false||(n===1?c.blankrows!==false:!!c.blankrows)){t.push(r.row);return}}return t.push(null)};return t}var Xw={to_json:jw,to_html:Gw,to_csv:Vw,set_readable:zw};if(typeof vm!=="undefined")e.parse_xlscfb=vm;e.parse_zip=Xb;e.read=iw;e.readFile=sw;e.readFileSync=sw;e.write=gw;e.writeFile=bw;e.writeFileSync=bw;e.writeFileAsync=kw;e.utils=Ww;e.writeXLSX=pw;e.writeFileXLSX=ww;e.SSF=Ve;if(typeof Xw!=="undefined")e.stream=Xw;if(typeof Ke!=="undefined")e.CFB=Ke;if(typeof require!=="undefined"){var $w=undefined;if(($w||{}).Readable)zw($w.Readable)}}if(typeof exports!=="undefined")make_xlsx_lib(exports);else if(typeof module!=="undefined"&&module.exports)make_xlsx_lib(module.exports);else if(typeof define==="function"&&define.amd)define("xlsx",function(){if(!XLSX.version)make_xlsx_lib(XLSX);return XLSX});else make_xlsx_lib(XLSX);if(typeof window!=="undefined"&&!window.XLSX)try{window.XLSX=XLSX}catch(e){}
 </script>
+
+<!-- ═══════ FIREBASE: SOLO PARA VALIDAR CÓDIGO DE ACTIVACIÓN ═══════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, query, where, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBRYZoIdeq8Pjf7sg2dmv8Yco5LZ63wTiQ",
+  authDomain: "codigo-prestamos.firebaseapp.com",
+  projectId: "codigo-prestamos",
+  storageBucket: "codigo-prestamos.firebasestorage.app",
+  messagingSenderId: "844470558104",
+  appId: "1:844470558104:web:bf4f33a11988114b7e9fed"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Expone una función global para validar el código contra Firestore.
+// Solo LEE la colección, nunca escribe ni borra nada desde aquí.
+window.validarCodigoFirebase = async function(codigoIngresado){
+  try{
+    const codigosCol = collection(db, "codigos_activacion");
+    const q = query(codigosCol, where("codigo", "==", codigoIngresado.trim().toUpperCase()));
+    const snapshot = await getDocs(q);
+    if(snapshot.empty) return { ok:false, motivo:'no_existe' };
+    const data = snapshot.docs[0].data();
+    if(!data.activo) return { ok:false, motivo:'desactivado' };
+    return { ok:true, cliente:data.cliente||'' };
+  }catch(e){
+    console.error('Error validando código:', e);
+    return { ok:false, motivo:'error_conexion', error:e.message };
+  }
+};
+window.dispatchEvent(new Event('firebase-activacion-ready'));
+</script>
 </head>
 <body>
 
+<!-- ═══════ ACTIVACIÓN POR CÓDIGO ═══════ -->
+<div class="login-wrap" id="activacion-wrap" style="display:none">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-brand">🔑 Activar aplicación</div>
+    </div>
+    <div class="login-title" style="font-size:13px;color:var(--text-muted);font-weight:400;margin-bottom:20px;text-align:center">
+      Ingresa el código de activación que te entregó tu proveedor para usar esta aplicación en este dispositivo.
+    </div>
+    <div class="login-err" id="activacion-err">Código inválido o desactivado</div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label>Código de activación</label>
+      <input id="act-codigo" type="text" placeholder="PAO-XXXX-XXXX" style="text-transform:uppercase;letter-spacing:1px;font-family:monospace;font-weight:700;text-align:center" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" id="act-btn" onclick="validarActivacion()">Activar</button>
+    <div id="act-status" style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:14px"></div>
+  </div>
+</div>
+
 <!-- ═══════ LOGIN ═══════ -->
-<div class="login-wrap" id="login-wrap">
+<div class="login-wrap" id="login-wrap" style="display:none">
   <div class="login-box">
     <div class="login-logo" id="login-logo-area">
       <div class="login-brand" id="login-brand-name">Préstamos a la Orden</div>
@@ -270,6 +327,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       <button class="nav-tab" onclick="goTo('clientes')">Clientes</button>
       <button class="nav-tab" onclick="goTo('prestamos')">Préstamos</button>
       <button class="nav-tab" onclick="goTo('pagos')">Registrar Pago</button>
+      <button class="nav-tab" onclick="goTo('miDia')">Mi Día</button>
       <button class="nav-tab admin-only" onclick="goTo('exportar')">Exportar</button>
       <button class="nav-tab admin-only" onclick="goTo('arqueo')">Arqueo</button>
       <button class="nav-tab admin-only" onclick="goTo('bitacora')">Bitácora</button>
@@ -287,6 +345,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       <button class="nav-mobile-tab" onclick="goTo('clientes');closeMobileMenu()">👥 Clientes</button>
       <button class="nav-mobile-tab" onclick="goTo('prestamos');closeMobileMenu()">💰 Préstamos</button>
       <button class="nav-mobile-tab" onclick="goTo('pagos');closeMobileMenu()">💳 Registrar Pago</button>
+      <button class="nav-mobile-tab" onclick="goTo('miDia');closeMobileMenu()">📆 Mi Día</button>
       <button class="nav-mobile-tab admin-only" onclick="goTo('exportar');closeMobileMenu()">📁 Exportar</button>
       <button class="nav-mobile-tab admin-only" onclick="goTo('arqueo');closeMobileMenu()">📋 Arqueo</button>
       <button class="nav-mobile-tab admin-only" onclick="goTo('bitacora');closeMobileMenu()">🔍 Bitácora</button>
@@ -335,6 +394,9 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       <div id="cli-lista" style="display:none">
         <div class="card">
           <div class="card-title">Clientes registrados</div>
+          <div class="form-group" style="max-width:320px;margin-bottom:14px">
+            <input type="text" id="cli-buscar" placeholder="🔍 Buscar por nombre o cédula..." oninput="renderTablaClientes()">
+          </div>
           <div class="tbl-wrap"><table>
             <thead><tr><th></th><th>Nombre</th><th>Cédula</th><th>Teléfono</th><th>Dirección</th><th>Préstamos</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody id="cli-tabla"></tbody>
@@ -376,6 +438,9 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       <div id="pre-lista" style="display:none">
         <div class="card">
           <div class="card-title">Cartera de préstamos</div>
+          <div class="form-group" style="max-width:320px;margin-bottom:14px">
+            <input type="text" id="pre-buscar" placeholder="🔍 Buscar por cliente..." oninput="renderTablaPrestamos()">
+          </div>
           <div class="tbl-wrap"><table>
             <thead><tr><th>#</th><th>Cliente</th><th>Monto</th><th>Total</th><th>Cuota</th><th>Frec.</th><th>Avance</th><th>Estado</th><th></th></tr></thead>
             <tbody id="pre-tabla"></tbody>
@@ -506,6 +571,17 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
         </div>
 
         <div class="config-section">
+          <div class="config-section-title">Código de activación</div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Tu código de activación (compártelo con tus cobradores para activar sus dispositivos)</div>
+              <div id="codigo-activacion-display" style="font-family:monospace;font-weight:700;font-size:16px;letter-spacing:1px;color:var(--navy)">—</div>
+            </div>
+            <button class="btn" onclick="copiarCodigoActivacion()">📋 Copiar código</button>
+          </div>
+        </div>
+
+        <div class="config-section">
           <div class="config-section-title">Usuarios del sistema</div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:14px">
             <div class="form-group"><label>Nuevo usuario</label><input id="new-username" type="text" placeholder="nombre de usuario"></div>
@@ -523,6 +599,17 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       </div>
     </div>
 
+    <!-- MI DÍA (vista personal del cobrador) -->
+    <div class="page" id="page-miDia">
+      <div class="card">
+        <div class="card-title">📆 Mi Día — <span id="midia-usuario"></span></div>
+        <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap">
+          <div class="form-group" style="min-width:160px"><label>Fecha</label><input type="date" id="midia-fecha" onchange="renderMiDia()"></div>
+          <button class="btn" onclick="document.getElementById('midia-fecha').value=today();renderMiDia()">Hoy</button>
+        </div>
+        <div id="midia-resultado"></div>
+      </div>
+    </div>
 
     <!-- ARQUEO DIARIO -->
     <div class="page admin-only" id="page-arqueo">
@@ -579,6 +666,72 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
       <div class="form-group form-full"><label>Dirección</label><input id="edit-cli-dir" type="text"></div>
     </div>
     <div class="btn-row"><button class="btn btn-primary" onclick="guardarEditCliente()">Guardar cambios</button></div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PRÉSTAMO -->
+<div class="modal-backdrop" id="modal-edit-pre">
+  <div class="modal">
+    <div class="modal-title">Editar préstamo — <span id="edit-pre-cliente-nombre"></span> <button class="modal-close" onclick="cerrarModal('modal-edit-pre')">×</button></div>
+    <input type="hidden" id="edit-pre-id">
+    <div class="alert alert-yellow" id="edit-pre-warning" style="display:none;margin-bottom:14px">⚠️ Este préstamo ya tiene pagos registrados. Cambiar el monto, interés o cuotas puede descuadrar el historial de pagos existente.</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Monto prestado (RD$) *</label><input id="edit-pre-monto" type="number" min="0"></div>
+      <div class="form-group"><label>Interés (%)</label><input id="edit-pre-interes" type="number" min="0" max="100"></div>
+      <div class="form-group"><label>Frecuencia de pago</label>
+        <select id="edit-pre-freq"><option value="Semanal">Semanal (cada 7 días)</option><option value="Quincenal">Quincenal (cada 15 días)</option></select>
+      </div>
+      <div class="form-group"><label>Cantidad de cuotas</label><input id="edit-pre-cuotas" type="number" min="1"></div>
+      <div class="form-group form-full"><label>Fecha de desembolso</label><input id="edit-pre-fecha" type="date"></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="guardarEditPrestamo()">Guardar cambios</button></div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE CLIENTE (lista de sus préstamos) -->
+<div class="modal-backdrop" id="modal-detalle-cliente">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-title">📋 Préstamos de <span id="detcli-nombre"></span> <button class="modal-close" onclick="cerrarModal('modal-detalle-cliente')">×</button></div>
+    <input type="hidden" id="detcli-id">
+    <div id="detcli-resumen" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px"></div>
+    <div id="detcli-lista"></div>
+    <div class="btn-row admin-only">
+      <button class="btn btn-primary" onclick="exportarExpedienteCliente()">📄 Exportar expediente (PDF)</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE PRÉSTAMO (desglose completo + historial) -->
+<div class="modal-backdrop" id="modal-detalle-prestamo">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-title">💰 Detalle del préstamo — <span id="detpre-nombre"></span> <button class="modal-close" onclick="cerrarModal('modal-detalle-prestamo')">×</button></div>
+    <div id="detpre-contenido"></div>
+  </div>
+</div>
+
+<!-- MODAL ANULAR PAGO (con motivo obligatorio) -->
+<div class="modal-backdrop" id="modal-anular-pago">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-title">🚫 Anular pago <button class="modal-close" onclick="cerrarModal('modal-anular-pago')">×</button></div>
+    <input type="hidden" id="anular-pago-id">
+    <div id="anular-pago-resumen" class="calc-box" style="margin-bottom:14px"></div>
+    <div class="form-group">
+      <label>Motivo de la anulación *</label>
+      <select id="anular-motivo-select" onchange="document.getElementById('anular-motivo-otro').style.display=this.value==='Otro'?'block':'none'" style="margin-bottom:8px">
+        <option value="">Selecciona un motivo</option>
+        <option value="Error de digitación">Error de digitación (monto incorrecto)</option>
+        <option value="Pago duplicado">Pago duplicado</option>
+        <option value="Cheque o transferencia rechazada">Cheque o transferencia rechazada</option>
+        <option value="Cliente reclamó">Cliente reclamó el pago</option>
+        <option value="Préstamo equivocado">Se aplicó al préstamo equivocado</option>
+        <option value="Otro">Otro motivo (especificar)</option>
+      </select>
+      <textarea id="anular-motivo-otro" placeholder="Describe el motivo..." style="display:none;width:100%;min-height:70px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);color:var(--text);font-family:inherit"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="cerrarModal('modal-anular-pago')">Cancelar</button>
+      <button class="btn btn-danger" onclick="confirmarAnulacion()">Anular pago</button>
+    </div>
   </div>
 </div>
 
@@ -701,6 +854,7 @@ function doLogin(){
   const user=CONFIG.users.find(x=>x.username===u&&x.password===p);
   if(!user){document.getElementById('login-err').style.display='block';return}
   CURRENT_USER=user;
+  sessionStorage.setItem('pao_session', JSON.stringify({username:user.username}));
   document.getElementById('login-err').style.display='none';
   document.getElementById('login-wrap').style.display='none';
   document.getElementById('app').classList.add('visible');
@@ -712,11 +866,32 @@ function doLogin(){
   renderDashboard();
 }
 
+function intentarSesionGuardada(){
+  try{
+    const saved=JSON.parse(sessionStorage.getItem('pao_session')||'null');
+    if(!saved) return false;
+    const user=CONFIG.users.find(x=>x.username===saved.username);
+    if(!user) return false;
+    CURRENT_USER=user;
+    document.getElementById('login-wrap').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    applyRole();
+    applyTheme(CONFIG.theme);
+    actualizarMoraAutomatica();
+    applyBranding();
+    actualizarSelectsClientes();
+    renderDashboard();
+    return true;
+  }catch(e){return false}
+}
+
 document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('l-user').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 
 function doLogout(){
+  if(!confirm('¿Cerrar sesión?')) return;
   CURRENT_USER=null;
+  sessionStorage.removeItem('pao_session');
   document.getElementById('app').classList.remove('visible');
   document.getElementById('login-wrap').style.display='flex';
   document.getElementById('l-user').value='';
@@ -751,6 +926,18 @@ function applyRole(){
   // cobrador lands on pagos
   if(!isAdmin) goTo('pagos');
 }
+function esAdmin(){
+  return CURRENT_USER && CURRENT_USER.role==='admin';
+}
+// Oculta elementos .admin-only generados dinámicamente (tablas, modales)
+// después de cada render, ya que applyRole() solo corre una vez al login.
+function aplicarVisibilidadAdmin(){
+  if(!CURRENT_USER) return;
+  const isAdmin=esAdmin();
+  document.querySelectorAll('.admin-only').forEach(el=>{
+    el.style.display=isAdmin?'':'none';
+  });
+}
 
 // ═══════════════════ THEME ═══════════════════
 function applyTheme(t){
@@ -780,6 +967,7 @@ function applyBranding(){
 
 // ═══════════════════ NAVIGATION ═══════════════════
 function goTo(page){
+  actualizarMoraAutomatica();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab,.nav-mobile-tab').forEach(b=>b.classList.remove('active'));
   const pg=document.getElementById('page-'+page);
@@ -791,6 +979,7 @@ function goTo(page){
   if(page==='clientes') renderClientes();
   if(page==='prestamos') renderPrestamos();
   if(page==='pagos') renderPagosPage();
+  if(page==='miDia') renderMiDia();
   if(page==='exportar') renderExportar();
   if(page==='arqueo') renderArqueo();
   if(page==='bitacora') renderBitacoraPage();
@@ -827,14 +1016,76 @@ function getProximaCuotaPendiente(p){
   const capTotal=pagos.reduce((s,pg)=>s+pg.capitalAplicado+pg.excedente,0);
   const intTotal=pagos.reduce((s,pg)=>s+pg.interesAplicado,0);
   const freq=p.frecuencia==='Semanal'?7:15;
-  for(let i=0;i<p.cuotas;i++){
-    const capEsp=(i+1)*p.capitalCuota;
-    const intEsp=(i+1)*p.interesCuota;
-    if(capTotal<capEsp*0.99||intTotal<intEsp*0.99){
-      return{numero:i+1,capitalPend:Math.max(0,capEsp-capTotal),interesPend:Math.max(0,intEsp-intTotal),fecha:addDays(p.fechaDesembolso,(i+1)*freq)}
+  // Si hay un plan de cuotas personalizado (por recálculo de excedente), usarlo
+  const plan=getPlanCuotas(p);
+  let capAcum=0, intAcum=0;
+  for(let i=0;i<plan.length;i++){
+    capAcum+=plan[i].capital;
+    intAcum+=plan[i].interes;
+    if(capTotal<capAcum*0.99||intTotal<intAcum*0.99){
+      return{
+        numero:i+1,
+        capitalPend:Math.max(0,capAcum-capTotal),
+        interesPend:Math.max(0,intAcum-intTotal),
+        fecha:addDays(p.fechaDesembolso,(i+1)*freq)
+      }
     }
   }
   return null;
+}
+
+// ── PLAN DE CUOTAS ────────────────────────────────────────────
+// Devuelve un array de {capital, interes} por cada cuota del préstamo.
+// Por defecto todas son iguales (capitalCuota/interesCuota). Si el préstamo
+// tiene ajustes guardados (de un recálculo por excedente), los aplica desde
+// la cuota correspondiente en adelante.
+function getPlanCuotas(p){
+  const plan=[];
+  for(let i=0;i<p.cuotas;i++){
+    plan.push({capital:p.capitalCuota,interes:p.interesCuota});
+  }
+  if(p.ajustesCuotas&&p.ajustesCuotas.length>0){
+    p.ajustesCuotas.forEach(adj=>{
+      for(let i=adj.desdeCuota-1;i<p.cuotas;i++){
+        plan[i]={capital:adj.capital,interes:adj.interes};
+      }
+    });
+  }
+  return plan;
+}
+
+// ── RECÁLCULO DE CUOTAS POR EXCEDENTE ────────────────────────
+// Cuando el cobrador elige "reducir cuotas" en vez de "acortar plazo",
+// prorrateamos el capital e interés pendientes entre las cuotas que faltan,
+// SIN tocar las cuotas ya pasadas (usa un ajuste a partir de la próxima cuota).
+function recalcularCuotasPorExcedente(p, excedenteAplicadoCapital){
+  const pagos=getPagosPresta(p.id).filter(pg=>pg.estado!=='Anulado');
+  const capTotalPagado=pagos.reduce((s,pg)=>s+pg.capitalAplicado+pg.excedente,0)+excedenteAplicadoCapital;
+  const intTotalPagado=pagos.reduce((s,pg)=>s+pg.interesAplicado,0);
+
+  const plan=getPlanCuotas(p);
+  let capAcum=0,intAcum=0,cuotaActual=p.cuotas+1;
+  for(let i=0;i<plan.length;i++){
+    capAcum+=plan[i].capital;
+    intAcum+=plan[i].interes;
+    if(capTotalPagado<capAcum*0.99){ cuotaActual=i+1; break; }
+  }
+  const cuotasRestantes=p.cuotas-cuotaActual+1;
+  if(cuotasRestantes<=0) return false; // ya no quedan cuotas
+
+  const capitalPendienteReal=Math.max(0,p.monto-capTotalPagado);
+  const interesPendienteReal=Math.max(0,p.interesCalc-intTotalPagado);
+  const nuevoCapitalCuota=capitalPendienteReal/cuotasRestantes;
+  const nuevoInteresCuota=interesPendienteReal/cuotasRestantes;
+
+  if(!p.ajustesCuotas) p.ajustesCuotas=[];
+  p.ajustesCuotas.push({
+    desdeCuota:cuotaActual,
+    capital:nuevoCapitalCuota,
+    interes:nuevoInteresCuota,
+    fecha:today()
+  });
+  return true;
 }
 
 // ═══════════════════ CÉDULA VALIDATION ═══════════════════
@@ -926,8 +1177,18 @@ function renderClientes(){actualizarSelectsClientes()}
 
 function renderTablaClientes(){
   const tbody=document.getElementById('cli-tabla');
+  const buscarEl=document.getElementById('cli-buscar');
+  const q=buscarEl?buscarEl.value.trim().toLowerCase():'';
+  let lista=DB.clientes;
+  if(q){
+    lista=lista.filter(c=>
+      c.nombre.toLowerCase().includes(q) ||
+      (c.cedula&&c.cedula.replace(/-/g,'').includes(q.replace(/-/g,'')))
+    );
+  }
   if(DB.clientes.length===0){tbody.innerHTML='<tr><td colspan="8" class="empty">Sin clientes registrados</td></tr>';return}
-  tbody.innerHTML=DB.clientes.map(c=>{
+  if(lista.length===0){tbody.innerHTML='<tr><td colspan="8" class="empty">Sin resultados para "'+q+'"</td></tr>';return}
+  tbody.innerHTML=lista.map(c=>{
     const pres=DB.prestamos.filter(p=>p.clienteId===c.id);
     const activos=pres.filter(p=>p.estado==='Activo').length;
     const morosos=pres.filter(p=>p.estado==='Moroso').length;
@@ -939,14 +1200,15 @@ function renderTablaClientes(){
       <td>${c.cedula||'—'}</td>
       <td>${c.telefono||'—'}</td>
       <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.direccion||'—'}</td>
-      <td>${pres.length>0?pres.length+' préstamo'+(pres.length!==1?'s':''):'—'}</td>
+      <td>${pres.length>0?`<a href="#" onclick="event.preventDefault();abrirDetalleCliente('${c.id}')" style="color:var(--navy-light);font-weight:600;text-decoration:underline">${pres.length} préstamo${pres.length!==1?'s':''}</a>`:'—'}</td>
       <td><span class="badge ${badge}">${label}</span></td>
       <td style="white-space:nowrap">
         <button class="btn btn-sm" onclick="abrirEditCliente('${c.id}')">Editar</button>
-        <button class="btn btn-sm btn-danger" onclick="borrarCliente('${c.id}')" style="margin-left:4px">Borrar</button>
+        <button class="btn btn-sm btn-danger admin-only" onclick="borrarCliente('${c.id}')" style="margin-left:4px">Borrar</button>
       </td>
     </tr>`;
   }).join('');
+  aplicarVisibilidadAdmin();
 }
 
 function abrirEditCliente(id){
@@ -987,11 +1249,13 @@ function guardarEditCliente(){
 }
 
 function borrarCliente(id){
+  if(!esAdmin()){toast('Solo un administrador puede borrar clientes','err');return}
   const c=DB.clientes.find(x=>x.id===id);if(!c)return;
   const tienePresta=DB.prestamos.some(p=>p.clienteId===id);
   if(tienePresta){toast('No se puede borrar: tiene préstamos registrados','err');return}
   if(!confirm(`¿Borrar a ${c.nombre}? Esta acción no se puede deshacer.`))return;
   DB.clientes=DB.clientes.filter(x=>x.id!==id);
+  audit('Borrar cliente',`Cliente eliminado: ${c.nombre}`,id);
   save();toast('Cliente eliminado');renderTablaClientes();actualizarSelectsClientes();
 }
 
@@ -1041,8 +1305,18 @@ function guardarPrestamo(){
 function renderPrestamos(){actualizarSelectsClientes()}
 function renderTablaPrestamos(){
   const tbody=document.getElementById('pre-tabla');
+  const buscarEl=document.getElementById('pre-buscar');
+  const q=buscarEl?buscarEl.value.trim().toLowerCase():'';
+  let lista=DB.prestamos.map((p,i)=>({p,i}));
+  if(q){
+    lista=lista.filter(({p})=>{
+      const cli=DB.clientes.find(c=>c.id===p.clienteId);
+      return cli&&cli.nombre.toLowerCase().includes(q);
+    });
+  }
   if(DB.prestamos.length===0){tbody.innerHTML='<tr><td colspan="9" class="empty">Sin préstamos registrados</td></tr>';return}
-  tbody.innerHTML=DB.prestamos.map((p,i)=>{
+  if(lista.length===0){tbody.innerHTML='<tr><td colspan="9" class="empty">Sin resultados para "'+q+'"</td></tr>';return}
+  tbody.innerHTML=lista.map(({p,i})=>{
     const cli=DB.clientes.find(c=>c.id===p.clienteId);
     const stats=calcPrestamoStats(p);
     const badge=p.estado==='Activo'?'badge-green':p.estado==='Moroso'?'badge-red':'badge-gray';
@@ -1055,15 +1329,206 @@ function renderTablaPrestamos(){
       <td>${p.frecuencia}</td>
       <td style="min-width:100px"><div class="progress-bg" style="height:5px"><div class="progress-fill" style="width:${stats.pct}%"></div></div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${stats.pct}%</div></td>
       <td><span class="badge ${badge}">${p.estado}</span></td>
-      <td><button class="btn btn-sm" onclick="cambiarEstado('${p.id}')">Estado</button></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm" onclick="abrirDetallePrestamo('${p.id}')">Ver</button>
+        <button class="btn btn-sm admin-only" onclick="abrirEditPrestamo('${p.id}')">Editar</button>
+        <select class="btn btn-sm admin-only" style="padding:5px 6px" onchange="cambiarEstado('${p.id}',this.value);this.value=''">
+          <option value="">Estado ▾</option>
+          <option value="Activo">Marcar Activo</option>
+          <option value="Moroso">Marcar Moroso</option>
+          <option value="Finalizado">Marcar Finalizado</option>
+        </select>
+      </td>
     </tr>`;
   }).join('');
+  aplicarVisibilidadAdmin();
 }
-function cambiarEstado(pid){
+function cambiarEstado(pid,nuevoEstado){
+  if(!esAdmin()){toast('Solo un administrador puede cambiar el estado del préstamo','err');return}
   const p=DB.prestamos.find(x=>x.id===pid);if(!p)return;
-  const estados=['Activo','Moroso','Finalizado'];
-  p.estado=estados[(estados.indexOf(p.estado)+1)%3];
-  save();renderTablaPrestamos();toast('Estado: '+p.estado);
+  if(!nuevoEstado||nuevoEstado===p.estado)return;
+  const cli=DB.clientes.find(c=>c.id===p.clienteId);
+  if(!confirm(`¿Cambiar el préstamo de ${cli?cli.nombre:'?'} de "${p.estado}" a "${nuevoEstado}"?`))return;
+  const estadoAnterior=p.estado;
+  p.estado=nuevoEstado;
+  audit('Cambiar estado préstamo',`${cli?cli.nombre:'?'}: ${estadoAnterior} → ${nuevoEstado}`,pid);
+  save();renderTablaPrestamos();toast('Estado actualizado: '+nuevoEstado);
+}
+
+// ── DETALLE DE CLIENTE: lista de todos sus préstamos ──────────
+function abrirDetalleCliente(cid){
+  const c=DB.clientes.find(x=>x.id===cid);if(!c)return;
+  document.getElementById('detcli-nombre').textContent=c.nombre;
+  const pres=DB.prestamos.filter(p=>p.clienteId===cid);
+
+  const totalPrestado=pres.reduce((s,p)=>s+p.monto,0);
+  const totalDeuda=pres.reduce((s,p)=>{
+    const stats=calcPrestamoStats(p);
+    return s+Math.max(0,p.totalCobrar-stats.totalPagado);
+  },0);
+  // Total histórico pagado (capital + interés) de TODOS los préstamos, incluidos finalizados
+  const totalPagadoHistorico=pres.reduce((s,p)=>{
+    const stats=calcPrestamoStats(p);
+    return s+stats.totalPagado;
+  },0);
+  const totalInteresHistorico=pres.reduce((s,p)=>{
+    const stats=calcPrestamoStats(p);
+    return s+stats.intPagado;
+  },0);
+  const activos=pres.filter(p=>p.estado==='Activo').length;
+  const morosos=pres.filter(p=>p.estado==='Moroso').length;
+  const finalizados=pres.filter(p=>p.estado==='Finalizado').length;
+
+  document.getElementById('detcli-resumen').innerHTML=`
+    <div class="kpi" style="flex:1;min-width:120px"><div class="kpi-label">Total prestado (histórico)</div><div class="kpi-value blue">${fmt(totalPrestado)}</div></div>
+    <div class="kpi" style="flex:1;min-width:120px"><div class="kpi-label">Total pagado (histórico)</div><div class="kpi-value green">${fmt(totalPagadoHistorico)}</div></div>
+    <div class="kpi" style="flex:1;min-width:120px"><div class="kpi-label">Deuda actual</div><div class="kpi-value red">${fmt(totalDeuda)}</div></div>
+    <div class="kpi" style="flex:1;min-width:120px"><div class="kpi-label">Intereses generados</div><div class="kpi-value amber">${fmt(totalInteresHistorico)}</div></div>
+    <div class="kpi" style="flex:1;min-width:160px"><div class="kpi-label">Préstamos</div><div class="kpi-value" style="font-size:14px">${pres.length} total${morosos>0?' · '+morosos+' en mora':''}${finalizados>0?' · '+finalizados+' finalizados':''}</div></div>
+  `;
+
+  const lista=document.getElementById('detcli-lista');
+  if(pres.length===0){
+    lista.innerHTML='<div class="empty">Este cliente no tiene préstamos registrados</div>';
+  } else {
+    lista.innerHTML=pres.map((p,i)=>{
+      const stats=calcPrestamoStats(p);
+      const mora=calcularMora(p);
+      const badge=p.estado==='Activo'?'badge-green':p.estado==='Moroso'?'badge-red':'badge-gray';
+      const saldoP=Math.max(0,p.totalCobrar-stats.totalPagado);
+      return`<div class="prestamo-card" onclick="cerrarModal('modal-detalle-cliente');abrirDetallePrestamo('${p.id}')">
+        <div class="prestamo-card-header">
+          <span class="prestamo-card-id">Préstamo del ${formatDate(p.fechaDesembolso)}</span>
+          <span class="badge ${badge}">${p.estado}</span>
+        </div>
+        <div class="prestamo-card-amount">${fmt(p.totalCobrar)} <span style="font-size:12px;font-weight:400;color:var(--text-muted)">total</span></div>
+        <div class="prestamo-card-meta">
+          <span>${p.frecuencia} · ${p.cuotas} cuotas</span>
+          <span>Pagado: ${fmt(stats.totalPagado)} (${stats.pct}%)</span>
+          <span style="color:${saldoP>0?'#ef4444':'#22c55e'}">Pendiente: ${fmt(saldoP)}</span>
+          ${mora.enMora?`<span style="color:#ef4444">⚠️ ${mora.dias}d mora</span>`:''}
+        </div>
+        <div class="progress-bg" style="height:4px;margin-top:8px"><div class="progress-fill" style="width:${stats.pct}%"></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('detcli-id').value=cid;
+  document.getElementById('modal-detalle-cliente').classList.add('open');
+  aplicarVisibilidadAdmin();
+}
+
+// ── DETALLE DE PRÉSTAMO: desglose completo + historial de pagos ──
+function abrirDetallePrestamo(pid){
+  const p=DB.prestamos.find(x=>x.id===pid);if(!p)return;
+  const cli=DB.clientes.find(c=>c.id===p.clienteId);
+  document.getElementById('detpre-nombre').textContent=cli?cli.nombre:'?';
+
+  const stats=calcPrestamoStats(p);
+  const mora=calcularMora(p);
+  const saldoP=Math.max(0,p.totalCobrar-stats.totalPagado);
+  const badge=p.estado==='Activo'?'badge-green':p.estado==='Moroso'?'badge-red':'badge-gray';
+  const pagos=getPagosPresta(pid).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const cuotaInfo=getProximaCuotaPendiente(p);
+
+  let html=`
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+      <span class="badge ${badge}" style="font-size:13px;padding:5px 12px">${p.estado}</span>
+      ${mora.enMora?`<span class="badge badge-red">⚠️ ${mora.dias} día${mora.dias!==1?'s':''} en mora</span>`:''}
+      ${cli&&cli.telefono?`<span style="font-size:12px;color:var(--text-muted)">📞 ${cli.telefono}</span>`:''}
+      ${cli&&cli.cedula?`<span style="font-size:12px;color:var(--text-muted)">🪪 ${cli.cedula}</span>`:''}
+    </div>
+
+    <div class="calc-box" style="margin-bottom:16px">
+      <div class="calc-box-title">Información del préstamo</div>
+      <div class="calc-row"><span>Fecha de desembolso</span><span>${formatDate(p.fechaDesembolso)}</span></div>
+      <div class="calc-row"><span>Monto prestado</span><span>${fmt(p.monto)}</span></div>
+      <div class="calc-row"><span>Interés (${p.interesPct}%)</span><span>${fmt(p.interesCalc)}</span></div>
+      <div class="calc-row highlight"><span>Total a cobrar</span><span>${fmt(p.totalCobrar)}</span></div>
+      <div class="calc-row"><span>Frecuencia</span><span>${p.frecuencia} (${p.cuotas} cuotas)</span></div>
+      <div class="calc-row"><span>Cuota base</span><span>${fmt(p.capitalCuota+p.interesCuota)}${p.ajustesCuotas&&p.ajustesCuotas.length>0?' (recalculada)':''}</span></div>
+    </div>
+
+    <div class="kpi-grid" style="margin-bottom:16px">
+      <div class="kpi"><div class="kpi-label">Pagado</div><div class="kpi-value green">${fmt(stats.totalPagado)}</div></div>
+      <div class="kpi"><div class="kpi-label">Pendiente</div><div class="kpi-value red">${fmt(saldoP)}</div></div>
+      <div class="kpi"><div class="kpi-label">Avance</div><div class="kpi-value blue">${stats.pct}%</div></div>
+      <div class="kpi"><div class="kpi-label">Próx. cuota</div><div class="kpi-value" style="font-size:14px">${cuotaInfo?'#'+cuotaInfo.numero+' — '+formatDate(cuotaInfo.fecha):'✅ Completo'}</div></div>
+    </div>
+  `;
+
+  if(pagos.length===0){
+    html+='<div class="empty">Sin pagos registrados todavía</div>';
+  } else {
+    html+=`
+    <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px">Historial de pagos</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>#</th><th>Fecha</th><th>Monto</th><th>Interés</th><th>Capital</th><th>Estado</th></tr></thead>
+      <tbody>
+        ${pagos.map((pg,i)=>{
+          const anulado=pg.estado==='Anulado';
+          const completa=!anulado&&pg.interesAplicado>=(p.interesCuota*0.99)&&pg.capitalAplicado>=(p.capitalCuota*0.99);
+          const lblBadge=anulado?'badge-red':completa?'badge-green':'badge-yellow';
+          const lbl=anulado?'Anulado':completa?'Completo':'Parcial';
+          return`<tr style="${anulado?'opacity:.5;text-decoration:line-through':''}">
+            <td>${i+1}</td><td>${formatDate(pg.fecha)}</td>
+            <td class="num"><strong>${fmt(pg.monto)}</strong></td>
+            <td class="num">${fmt(pg.interesAplicado)}</td>
+            <td class="num">${fmt(pg.capitalAplicado)}</td>
+            <td><span class="badge ${lblBadge}" ${anulado&&pg.motivoAnulacion?`title="Motivo: ${pg.motivoAnulacion}"`:''}>${lbl}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>`;
+  }
+
+  html+=`<div class="btn-row">
+    <button class="btn" onclick="cerrarModal('modal-detalle-prestamo');goTo('pagos');document.getElementById('pag-cliente').value='${p.clienteId}';cargarPrestamosCliente();">💳 Ir a registrar pago</button>
+    <button class="btn btn-primary admin-only" onclick="cerrarModal('modal-detalle-prestamo');abrirEditPrestamo('${p.id}')">✏️ Editar préstamo</button>
+  </div>`;
+
+  document.getElementById('detpre-contenido').innerHTML=html;
+  document.getElementById('modal-detalle-prestamo').classList.add('open');
+  aplicarVisibilidadAdmin();
+}
+
+// ── EDITAR PRÉSTAMO ──────────────────────────────────────────
+function abrirEditPrestamo(pid){
+  if(!esAdmin()){toast('Solo un administrador puede editar préstamos','err');return}
+  const p=DB.prestamos.find(x=>x.id===pid);if(!p)return;
+  document.getElementById('edit-pre-id').value=pid;
+  document.getElementById('edit-pre-monto').value=p.monto;
+  document.getElementById('edit-pre-interes').value=p.interesPct;
+  document.getElementById('edit-pre-freq').value=p.frecuencia;
+  document.getElementById('edit-pre-cuotas').value=p.cuotas;
+  document.getElementById('edit-pre-fecha').value=p.fechaDesembolso;
+  const cli=DB.clientes.find(c=>c.id===p.clienteId);
+  document.getElementById('edit-pre-cliente-nombre').textContent=cli?cli.nombre:'?';
+  const tienePagos=getPagosPresta(pid).filter(pg=>pg.estado!=='Anulado').length>0;
+  document.getElementById('edit-pre-warning').style.display=tienePagos?'block':'none';
+  document.getElementById('modal-edit-pre').classList.add('open');
+}
+function guardarEditPrestamo(){
+  if(!esAdmin()){toast('Solo un administrador puede editar préstamos','err');return}
+  const pid=document.getElementById('edit-pre-id').value;
+  const p=DB.prestamos.find(x=>x.id===pid);if(!p)return;
+  const monto=parseFloat(document.getElementById('edit-pre-monto').value)||0;
+  const pct=parseFloat(document.getElementById('edit-pre-interes').value)||0;
+  const freq=document.getElementById('edit-pre-freq').value;
+  const cuotas=parseInt(document.getElementById('edit-pre-cuotas').value)||0;
+  const fecha=document.getElementById('edit-pre-fecha').value;
+  if(!monto||!cuotas){toast('Completa monto y cuotas','err');return}
+  const intCalc=monto*(pct/100);
+  const total=monto+intCalc;
+  const cli=DB.clientes.find(c=>c.id===p.clienteId);
+  audit('Editar préstamo',`Préstamo de ${cli?cli.nombre:'?'} modificado`,pid);
+  p.monto=monto;p.interesPct=pct;p.interesCalc=intCalc;p.totalCobrar=total;
+  p.frecuencia=freq;p.cuotas=cuotas;
+  p.capitalCuota=monto/cuotas;p.interesCuota=intCalc/cuotas;
+  p.fechaDesembolso=fecha;
+  save();cerrarModal('modal-edit-pre');
+  renderTablaPrestamos();
+  toast('Préstamo actualizado');
 }
 
 // ═══════════════════ PAGOS ═══════════════════
@@ -1232,6 +1697,23 @@ function guardarPago(){
   const pr=DB.prestamos.find(x=>x.id===p.id);
   if(totalPagadoNuevo>=p.totalCobrar*0.999 && pr) pr.estado='Finalizado';
 
+  // ── EXCEDENTE: preguntar qué hacer con él ──────────────────
+  if(exc>0 && pr && pr.estado!=='Finalizado'){
+    const reducir=confirm(
+      `💰 Este pago incluye un excedente de ${fmt(exc)} que ya se aplicó al capital.\n\n`+
+      `¿Cómo quieres aplicarlo al resto del préstamo?\n\n`+
+      `Aceptar = Reducir el monto de las próximas cuotas\n`+
+      `Cancelar = Mantener las cuotas igual y acortar el plazo (terminar antes)`
+    );
+    if(reducir){
+      const ok=recalcularCuotasPorExcedente(pr, exc);
+      if(ok){
+        audit('Recalcular cuotas','Cuotas futuras reducidas por excedente de '+fmt(exc),p.id);
+        toast('Cuotas futuras recalculadas y reducidas');
+      }
+    }
+  }
+
   // ── BITÁCORA ──────────────────────────────────────────────
   const cli=DB.clientes.find(c=>c.id===p.clienteId);
   audit('Registrar pago',`Pago ${fmt(monto)} al préstamo de ${cli?cli.nombre:'?'}`,pagId);
@@ -1252,11 +1734,39 @@ function guardarPago(){
 
 // ── ANULAR PAGO ───────────────────────────────────────────────
 function anularPago(pagId){
+  if(!esAdmin()){toast('Solo un administrador puede anular pagos','err');return}
   const pg=DB.pagos.find(x=>x.id===pagId);
   if(!pg){toast('Pago no encontrado','err');return}
   if(pg.estado==='Anulado'){toast('Este pago ya fue anulado','err');return}
-  if(!confirm(`¿Anular el pago de ${fmt(pg.monto)} del ${formatDate(pg.fecha)}?\n\nEl pago quedará registrado como anulado en el historial.`)) return;
+  const cli=DB.clientes.find(c=>c.id===pg.clienteId);
+  document.getElementById('anular-pago-id').value=pagId;
+  document.getElementById('anular-pago-resumen').innerHTML=`
+    <div class="calc-row"><span>Cliente</span><span>${cli?cli.nombre:'?'}</span></div>
+    <div class="calc-row"><span>Fecha</span><span>${formatDate(pg.fecha)}</span></div>
+    <div class="calc-row highlight"><span>Monto</span><span>${fmt(pg.monto)}</span></div>
+  `;
+  document.getElementById('anular-motivo-select').value='';
+  document.getElementById('anular-motivo-otro').value='';
+  document.getElementById('anular-motivo-otro').style.display='none';
+  document.getElementById('modal-anular-pago').classList.add('open');
+}
+
+function confirmarAnulacion(){
+  const pagId=document.getElementById('anular-pago-id').value;
+  const pg=DB.pagos.find(x=>x.id===pagId);
+  if(!pg){toast('Pago no encontrado','err');cerrarModal('modal-anular-pago');return}
+
+  const motivoSel=document.getElementById('anular-motivo-select').value;
+  const motivoOtro=document.getElementById('anular-motivo-otro').value.trim();
+  if(!motivoSel){toast('Selecciona un motivo de anulación','err');return}
+  if(motivoSel==='Otro' && !motivoOtro){toast('Describe el motivo de la anulación','err');return}
+  const motivoFinal=motivoSel==='Otro'?motivoOtro:motivoSel;
+
   pg.estado='Anulado';
+  pg.motivoAnulacion=motivoFinal;
+  pg.anuladoPor=CURRENT_USER?CURRENT_USER.username:'';
+  pg.fechaAnulacion=new Date().toISOString();
+
   // Revertir estado del préstamo si estaba finalizado
   const p=DB.prestamos.find(x=>x.id===pg.prestamoId);
   if(p && p.estado==='Finalizado'){
@@ -1264,8 +1774,9 @@ function anularPago(pagId){
     if(totalActivo<p.totalCobrar*0.999) p.estado='Activo';
   }
   const cli=DB.clientes.find(c=>c.id===pg.clienteId);
-  audit('Anular pago',`Anulación pago ${fmt(pg.monto)} de ${cli?cli.nombre:'?'}`,pagId);
+  audit('Anular pago',`Anulación pago ${fmt(pg.monto)} de ${cli?cli.nombre:'?'} — Motivo: ${motivoFinal}`,pagId);
   save();
+  cerrarModal('modal-anular-pago');
   if(prestamoSeleccionado&&prestamoSeleccionado.id===pg.prestamoId) renderHistorialPrestamo(pg.prestamoId);
   toast('Pago anulado correctamente');
 }
@@ -1300,15 +1811,15 @@ function renderHistorialPrestamo(pid){
         <td class="num">${fmt(pg.interesAplicado)}</td>
         <td class="num">${fmt(pg.capitalAplicado)}</td>
         <td class="num">${pg.excedente>0?fmt(pg.excedente):'—'}</td>
-        <td><span class="badge ${badge}">${label}</span></td>
-        <td>${!anulado?`<button class="btn btn-sm btn-danger" onclick="anularPago('${pg.id}')">Anular</button>`:'<span style="font-size:11px;color:var(--text-muted)">anulado</span>'}</td>
+        <td><span class="badge ${badge}" ${anulado&&pg.motivoAnulacion?`title="Motivo: ${pg.motivoAnulacion}"`:''}>${label}</span></td>
+        <td>${!anulado?`<button class="btn btn-sm btn-danger admin-only" onclick="anularPago('${pg.id}')">Anular</button>`:`<span style="font-size:11px;color:var(--text-muted)" title="${pg.motivoAnulacion||''}">${pg.motivoAnulacion?'📝 '+(pg.motivoAnulacion.length>20?pg.motivoAnulacion.slice(0,20)+'...':pg.motivoAnulacion):'anulado'}</span>`}</td>
       </tr>`;
     }).join('');
   const freq=p.frecuencia==='Semanal'?7:15;
   const pagosActCal=pagos.filter(pg=>pg.estado!=='Anulado');
   const capTotal=pagosActCal.reduce((s,pg)=>s+pg.capitalAplicado+pg.excedente,0);
   const intTotal=pagosActCal.reduce((s,pg)=>s+pg.interesAplicado,0);
-  const cuotaTotal=p.capitalCuota+p.interesCuota;
+  const plan=getPlanCuotas(p);
   // Build per-cuota accumulation
   const pagoPorCuota={};
   pagosActCal.forEach(pg=>{
@@ -1318,19 +1829,25 @@ function renderHistorialPrestamo(pid){
   });
   // mora already declared above - reuse it
   let html='<div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.03em">Calendario de cuotas</div>';
+  if(p.ajustesCuotas&&p.ajustesCuotas.length>0){
+    html+='<div style="font-size:11px;color:#2563eb;margin-bottom:8px">ℹ️ Las cuotas desde la #'+p.ajustesCuotas[p.ajustesCuotas.length-1].desdeCuota+' fueron recalculadas por un excedente aplicado.</div>';
+  }
   html+='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px">';
+  let capAcum=0,intAcum=0;
   for(let i=0;i<p.cuotas;i++){
     const num=i+1;
-    const capEsp=num*p.capitalCuota, intEsp=num*p.interesCuota;
-    const pagada=capTotal>=capEsp*0.99&&intTotal>=intEsp*0.99;
+    const cuotaPlan=plan[i];
+    const cuotaTotalI=cuotaPlan.capital+cuotaPlan.interes;
+    capAcum+=cuotaPlan.capital; intAcum+=cuotaPlan.interes;
+    const pagada=capTotal>=capAcum*0.99&&intTotal>=intAcum*0.99;
     const fecha=addDays(p.fechaDesembolso,num*freq);
     const vencida=!pagada&&fecha<today();
     const pagadaEnCuota=pagoPorCuota[num]||0;
-    const parcial=!pagada&&pagadaEnCuota>0&&pagadaEnCuota<cuotaTotal;
-    const pctCuota=Math.min(100,Math.round(pagadaEnCuota/cuotaTotal*100));
+    const parcial=!pagada&&pagadaEnCuota>0&&pagadaEnCuota<cuotaTotalI;
+    const pctCuota=cuotaTotalI>0?Math.min(100,Math.round(pagadaEnCuota/cuotaTotalI*100)):0;
     const cl=pagada?'badge-green':parcial?'badge-yellow':vencida?'badge-red':'badge-gray';
     const icon=pagada?'✓':parcial?`${pctCuota}%`:vencida?'!':'·';
-    html+=`<div class="badge ${cl}" style="justify-content:center;padding:8px 4px;border-radius:8px;flex-direction:column;gap:2px" title="Cuota #${num}&#10;${formatDate(fecha)}${parcial?'&#10;Pagado: '+fmt(pagadaEnCuota)+' / '+fmt(cuotaTotal):''}">
+    html+=`<div class="badge ${cl}" style="justify-content:center;padding:8px 4px;border-radius:8px;flex-direction:column;gap:2px" title="Cuota #${num}&#10;${formatDate(fecha)}&#10;Monto: ${fmt(cuotaTotalI)}${parcial?'&#10;Pagado: '+fmt(pagadaEnCuota):''}">
       <span style="font-size:12px;font-weight:700">#${num}</span>
       <span style="font-size:9px;opacity:.85">${formatDate(fecha)}</span>
       <span style="font-size:10px;font-weight:600">${icon}</span>
@@ -1341,6 +1858,7 @@ function renderHistorialPrestamo(pid){
     html+=`<div class="alert alert-red" style="margin-top:12px;font-size:12px">⚠️ <strong>${mora.dias} día${mora.dias!==1?'s':''} en mora</strong>${mora.recargo>0?' — Recargo: '+fmt(mora.recargo):''}. Recargo configurado: ${CONFIG.pctMora||0}% semanal.</div>`;
   }
   document.getElementById('pag-cuotas-prog').innerHTML=html;
+  aplicarVisibilidadAdmin();
 }
 
 // ═══════════════════ RECIBOS PDF ═══════════════════
@@ -1365,10 +1883,12 @@ function reciboHTMLContent(titulo, filas, nota='', telefono=''){
   msgLines.push(cfg.mensajeRecibo||'Gracias por su pago puntual. 🙏');
   const msgText=encodeURIComponent(msgLines.join('\n'));
 
-  // WhatsApp URL — with number if available, without if not
+  // WhatsApp URL — el teléfono guardado ya es 10 dígitos (809XXXXXXX, 829XXXXXXX, 849XXXXXXX).
+  // Solo hace falta anteponer el código de país "1" de República Dominicana, sin duplicar nada.
   const tel=telefono.replace(/\D/g,'');
+  const telConPais = tel.length===10 ? '1'+tel : tel;
   const waUrl=tel
-    ? `https://wa.me/${tel.startsWith('1')?tel:'1809'+tel}?text=${msgText}`
+    ? `https://wa.me/${telConPais}?text=${msgText}`
     : `https://wa.me/?text=${msgText}`;
 
   return`<!DOCTYPE html><html lang="es"><head>
@@ -1439,6 +1959,118 @@ function abrirRecibo(titulo, filas, nota='', telefono=''){
     a.download=titulo.replace(/\s+/g,'_')+'.html';
     a.click();
     toast('Recibo descargado (popup bloqueado)','warn');
+  }
+}
+
+// ── EXPEDIENTE COMPLETO DE CLIENTE (todos sus préstamos + historiales) ──
+function exportarExpedienteCliente(){
+  const cid=document.getElementById('detcli-id').value;
+  const c=DB.clientes.find(x=>x.id===cid);
+  if(!c){toast('Cliente no encontrado','err');return}
+  const cfg=CFG();
+  const pres=DB.prestamos.filter(p=>p.clienteId===cid);
+
+  const totalPrestado=pres.reduce((s,p)=>s+p.monto,0);
+  const totalPagadoHistorico=pres.reduce((s,p)=>s+calcPrestamoStats(p).totalPagado,0);
+  const totalInteresHistorico=pres.reduce((s,p)=>s+calcPrestamoStats(p).intPagado,0);
+  const totalDeuda=pres.reduce((s,p)=>{
+    const stats=calcPrestamoStats(p);
+    return s+Math.max(0,p.totalCobrar-stats.totalPagado);
+  },0);
+
+  const logoTag=cfg.logo?`<img src="${cfg.logo}" style="height:50px;max-width:140px;object-fit:contain">`:
+    `<div style="font-size:22px;font-weight:800;color:#1a3a5c">${cfg.empresa||'Préstamos a la Orden'}</div>`;
+
+  let prestamosHTML='';
+  pres.forEach((p,idx)=>{
+    const stats=calcPrestamoStats(p);
+    const saldoP=Math.max(0,p.totalCobrar-stats.totalPagado);
+    const pagos=getPagosPresta(p.id).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+    prestamosHTML+=`
+      <div style="margin-top:24px;padding-top:16px;border-top:2px solid #e2e8f0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <h3 style="font-size:14px;color:#1a3a5c">Préstamo #${idx+1} — ${formatDate(p.fechaDesembolso)}</h3>
+          <span style="font-size:11px;padding:3px 10px;border-radius:12px;background:${p.estado==='Activo'?'#dcfce7':p.estado==='Moroso'?'#fee2e2':'#f1f5f9'};color:${p.estado==='Activo'?'#166534':p.estado==='Moroso'?'#991b1b':'#475569'};font-weight:700">${p.estado}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:10px;font-size:12px">
+          <tr><td style="padding:4px 8px;color:#64748b">Monto prestado</td><td style="padding:4px 8px;text-align:right;font-weight:600">${fmt(p.monto)}</td>
+              <td style="padding:4px 8px;color:#64748b">Interés (${p.interesPct}%)</td><td style="padding:4px 8px;text-align:right;font-weight:600">${fmt(p.interesCalc)}</td></tr>
+          <tr><td style="padding:4px 8px;color:#64748b">Total a cobrar</td><td style="padding:4px 8px;text-align:right;font-weight:600">${fmt(p.totalCobrar)}</td>
+              <td style="padding:4px 8px;color:#64748b">Frecuencia</td><td style="padding:4px 8px;text-align:right;font-weight:600">${p.frecuencia} (${p.cuotas} cuotas)</td></tr>
+          <tr><td style="padding:4px 8px;color:#64748b">Pagado</td><td style="padding:4px 8px;text-align:right;font-weight:600;color:#166534">${fmt(stats.totalPagado)}</td>
+              <td style="padding:4px 8px;color:#64748b">Pendiente</td><td style="padding:4px 8px;text-align:right;font-weight:600;color:${saldoP>0?'#991b1b':'#166534'}">${fmt(saldoP)}</td></tr>
+        </table>
+        ${pagos.length>0?`
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead><tr style="background:#f1f5f9"><th style="padding:5px 8px;text-align:left">Fecha</th><th style="padding:5px 8px;text-align:right">Monto</th><th style="padding:5px 8px;text-align:right">Interés</th><th style="padding:5px 8px;text-align:right">Capital</th><th style="padding:5px 8px;text-align:left">Estado</th></tr></thead>
+          <tbody>
+            ${pagos.map(pg=>{
+              const anulado=pg.estado==='Anulado';
+              return`<tr style="${anulado?'opacity:.5;text-decoration:line-through':''}">
+                <td style="padding:5px 8px;border-bottom:1px solid #f1f5f9">${formatDate(pg.fecha)}</td>
+                <td style="padding:5px 8px;border-bottom:1px solid #f1f5f9;text-align:right">${fmt(pg.monto)}</td>
+                <td style="padding:5px 8px;border-bottom:1px solid #f1f5f9;text-align:right">${fmt(pg.interesAplicado)}</td>
+                <td style="padding:5px 8px;border-bottom:1px solid #f1f5f9;text-align:right">${fmt(pg.capitalAplicado)}</td>
+                <td style="padding:5px 8px;border-bottom:1px solid #f1f5f9">${anulado?'Anulado':'Cobrado'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>`:'<div style="font-size:12px;color:#94a3b8">Sin pagos registrados</div>'}
+      </div>`;
+  });
+
+  const html=`<!DOCTYPE html><html lang="es"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expediente — ${c.nombre}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;font-size:14px;color:#1e293b;background:#fff;padding:20px;max-width:800px;margin:0 auto}
+    .share-bar{display:flex;gap:8px;margin-bottom:20px}
+    .btn-print{background:#64748b;color:#fff;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;flex:1}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:14px;border-bottom:3px solid #1a3a5c}
+    .cliente-box{background:#f0f7ff;border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px}
+    .cliente-box div{margin-bottom:4px}
+    @media print{.share-bar{display:none!important}}
+  </style></head><body>
+    <div class="share-bar"><button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button></div>
+    <div class="header">
+      <div>${logoTag}<div style="font-size:12px;color:#64748b;margin-top:6px">${cfg.telefono||''}${cfg.direccion?'<br>'+cfg.direccion:''}</div></div>
+      <div style="text-align:right"><h2 style="font-size:18px;color:#1a3a5c">EXPEDIENTE DE CLIENTE</h2><div style="font-size:12px;color:#64748b;margin-top:4px">${formatDate(today())}</div></div>
+    </div>
+    <div class="cliente-box">
+      <div><strong>Cliente:</strong> ${c.nombre}</div>
+      ${c.cedula?`<div><strong>Cédula:</strong> ${c.cedula}</div>`:''}
+      ${c.telefono?`<div><strong>Teléfono:</strong> ${c.telefono}</div>`:''}
+      ${c.direccion?`<div><strong>Dirección:</strong> ${c.direccion}</div>`:''}
+      <div><strong>Cliente desde:</strong> ${formatDate(c.fechaReg)}</div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:8px">
+      <tr style="background:#1a3a5c;color:#fff">
+        <th style="padding:8px;font-size:11px;text-transform:uppercase">Prestado</th>
+        <th style="padding:8px;font-size:11px;text-transform:uppercase">Pagado</th>
+        <th style="padding:8px;font-size:11px;text-transform:uppercase">Deuda actual</th>
+        <th style="padding:8px;font-size:11px;text-transform:uppercase">Intereses generados</th>
+      </tr>
+      <tr style="background:#f0f7ff;font-weight:700;text-align:center">
+        <td style="padding:10px">${fmt(totalPrestado)}</td>
+        <td style="padding:10px;color:#166534">${fmt(totalPagadoHistorico)}</td>
+        <td style="padding:10px;color:${totalDeuda>0?'#991b1b':'#166534'}">${fmt(totalDeuda)}</td>
+        <td style="padding:10px;color:#92400e">${fmt(totalInteresHistorico)}</td>
+      </tr>
+    </table>
+    ${prestamosHTML}
+  </body></html>`;
+
+  const w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();}
+  else{
+    const blob=new Blob([html],{type:'text/html'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='Expediente_'+c.nombre.replace(/\s+/g,'_')+'.html';
+    a.click();
+    toast('Expediente descargado (popup bloqueado)','warn');
   }
 }
 
@@ -1612,7 +2244,14 @@ function renderConfig(){
     document.getElementById('logo-img').style.display='block';
     document.getElementById('logo-placeholder').style.display='none';
   }
+  const codigoAct=localStorage.getItem('pao_codigo_activacion');
+  document.getElementById('codigo-activacion-display').textContent=codigoAct||'No disponible';
   renderUsersTable();
+}
+function copiarCodigoActivacion(){
+  const codigo=localStorage.getItem('pao_codigo_activacion');
+  if(!codigo){toast('No hay código de activación guardado en este dispositivo','err');return}
+  navigator.clipboard.writeText(codigo).then(()=>toast('Código copiado: '+codigo));
 }
 function renderUsersTable(){
   document.getElementById('users-tabla').innerHTML=CONFIG.users.map((u,i)=>{
@@ -1689,6 +2328,59 @@ function quitarLogo(){
 
 
 // ═══════════════════ ARQUEO DIARIO ═══════════════════
+// ═══════════════════ MI DÍA (vista personal) ═══════════════════
+function renderMiDia(){
+  if(!CURRENT_USER) return;
+  document.getElementById('midia-usuario').textContent=CURRENT_USER.username;
+  document.getElementById('midia-fecha').value=document.getElementById('midia-fecha').value||today();
+  generarMiDia();
+}
+function generarMiDia(){
+  const fecha=document.getElementById('midia-fecha').value||today();
+  const username=CURRENT_USER?CURRENT_USER.username:'';
+  let pagos=DB.pagos.filter(p=>p.fecha===fecha && p.usuario===username);
+  const activos=pagos.filter(p=>p.estado!=='Anulado');
+  const anulados=pagos.filter(p=>p.estado==='Anulado');
+  const totalCobrado=activos.reduce((s,p)=>s+p.monto,0);
+  const totalAnulado=anulados.reduce((s,p)=>s+p.monto,0);
+  const totalNeto=totalCobrado-totalAnulado;
+  const el=document.getElementById('midia-resultado');
+
+  if(pagos.length===0){
+    el.innerHTML=`<div class="empty">No has registrado cobros el ${formatDate(fecha)}</div>`;
+    return;
+  }
+
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px">
+      <div class="kpi"><div class="kpi-label">Total cobrado hoy</div><div class="kpi-value green">${fmt(totalCobrado)}</div></div>
+      <div class="kpi"><div class="kpi-label">Cantidad de pagos</div><div class="kpi-value blue">${activos.length}${anulados.length>0?' ('+anulados.length+' anulados)':''}</div></div>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">
+      Mis cobros — ${formatDate(fecha)}
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Hora</th><th>Cliente</th><th>Cuota#</th><th>Monto</th><th>Interés</th><th>Capital</th><th>Estado</th></tr></thead>
+      <tbody>
+        ${pagos.map(pg=>{
+          const cli=DB.clientes.find(c=>c.id===pg.clienteId);
+          const anulado=pg.estado==='Anulado';
+          return`<tr style="${anulado?'opacity:.5;text-decoration:line-through':''}">
+            <td>${pg.hora||'—'}</td>
+            <td>${cli?cli.nombre:'?'}</td>
+            <td>#${pg.cuotaNumero||'—'}</td>
+            <td class="num"><strong>${fmt(pg.monto)}</strong></td>
+            <td class="num">${fmt(pg.interesAplicado)}</td>
+            <td class="num">${fmt(pg.capitalAplicado)}</td>
+            <td><span class="badge ${anulado?'badge-red':'badge-green'}" ${anulado&&pg.motivoAnulacion?`title="Motivo: ${pg.motivoAnulacion}"`:''}>${anulado?'Anulado':'Cobrado'}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>
+    ${totalAnulado>0?`<div class="alert alert-yellow" style="margin-top:12px">⚠️ Tienes ${fmt(totalAnulado)} en pagos anulados hoy. Total neto: <strong>${fmt(totalNeto)}</strong></div>`:''}
+  `;
+}
+
 function renderArqueo(){
   document.getElementById('arq-fecha').value=today();
   const opts='<option value="">Todos</option>'+CONFIG.users.map(u=>`<option value="${u.username}">${u.username}</option>`).join('');
@@ -1733,7 +2425,7 @@ function generarArqueo(){
               <td>${cli?cli.nombre:'?'}</td>
               <td>#${pg.cuotaNumero||'—'}</td>
               <td class="num"><strong>${fmt(pg.monto)}</strong></td>
-              <td><span class="badge ${anulado?'badge-red':'badge-green'}">${anulado?'Anulado':'Cobrado'}</span></td>
+              <td><span class="badge ${anulado?'badge-red':'badge-green'}" ${anulado&&pg.motivoAnulacion?`title="Motivo: ${pg.motivoAnulacion}"`:''}>${anulado?'Anulado':'Cobrado'}</span></td>
             </tr>`;
           }).join('')}
         </tbody>
@@ -1816,6 +2508,76 @@ const loginLogoArea=document.getElementById('login-logo-area');
 if(CONFIG.logo){loginLogoArea.innerHTML=`<img src="${CONFIG.logo}" style="max-height:70px;max-width:200px;object-fit:contain;margin-bottom:8px">`}
 else{document.getElementById('login-brand-name').textContent=CONFIG.empresa||'Préstamos a la Orden'}
 document.title=CONFIG.empresa||'Préstamos a la Orden';
+
+// ── ACTIVACIÓN POR CÓDIGO ──────────────────────────────────────
+// Si este dispositivo ya fue activado antes, saltamos directo al login.
+// Si no, mostramos la pantalla de activación y bloqueamos el resto.
+function dispositivoActivado(){
+  return localStorage.getItem('pao_activado')==='true';
+}
+function mostrarPantallaActivacion(){
+  document.getElementById('login-wrap').style.display='none';
+  document.getElementById('activacion-wrap').style.display='flex';
+}
+function mostrarPantallaLogin(){
+  document.getElementById('activacion-wrap').style.display='none';
+  document.getElementById('login-wrap').style.display='flex';
+  intentarSesionGuardada();
+}
+
+async function validarActivacion(){
+  const codigo=document.getElementById('act-codigo').value.trim();
+  const btn=document.getElementById('act-btn');
+  const errEl=document.getElementById('activacion-err');
+  const statusEl=document.getElementById('act-status');
+  errEl.style.display='none';
+  if(!codigo){errEl.textContent='Ingresa el código de activación';errEl.style.display='block';return}
+  if(typeof window.validarCodigoFirebase!=='function'){
+    statusEl.textContent='Conectando, espera un momento e intenta de nuevo...';
+    return;
+  }
+  btn.disabled=true;btn.textContent='Verificando...';
+  statusEl.textContent='Verificando código...';
+  const resultado=await window.validarCodigoFirebase(codigo);
+  btn.disabled=false;btn.textContent='Activar';
+  statusEl.textContent='';
+  if(resultado.ok){
+    localStorage.setItem('pao_activado','true');
+    localStorage.setItem('pao_codigo_activacion',codigo.trim().toUpperCase());
+    toast('¡Aplicación activada correctamente!');
+    mostrarPantallaLogin();
+  } else {
+    if(resultado.motivo==='no_existe'){
+      errEl.textContent='Código no encontrado. Verifica que esté escrito correctamente.';
+    } else if(resultado.motivo==='desactivado'){
+      errEl.textContent='Este código fue desactivado. Contacta a tu proveedor.';
+    } else {
+      errEl.textContent='No se pudo conectar. Verifica tu conexión a internet e intenta de nuevo.';
+    }
+    errEl.style.display='block';
+  }
+}
+window.validarActivacion=validarActivacion;
+
+// Permite Enter en el campo de código
+document.getElementById('act-codigo').addEventListener('keydown',e=>{if(e.key==='Enter')validarActivacion()});
+
+// Decisión inicial: ¿pedir código o ir directo al login?
+if(dispositivoActivado()){
+  mostrarPantallaLogin();
+} else {
+  mostrarPantallaActivacion();
+}
+
+// Revisar mora automáticamente cada 60 segundos mientras la app está abierta
+setInterval(()=>{
+  if(CURRENT_USER){
+    actualizarMoraAutomatica();
+    // Si está en el dashboard, refrescar la vista para que se vea el cambio
+    const dashActivo=document.getElementById('page-dashboard');
+    if(dashActivo&&dashActivo.classList.contains('active')) renderDashboard();
+  }
+}, 60000);
 </script>
 </body>
 </html>
